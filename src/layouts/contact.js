@@ -12,15 +12,16 @@ export default class Contact extends React.Component {
         const data = _.get(this.props, 'data');
         const config = _.get(data, 'config');
         const header = _.get(config, 'header');
-        const page = _.get(this.props, 'page');
+        const page = _.get(this.props, 'page.page');
+        console.log(this.props);
         const title = _.get(page, 'title');
         const subtitle = _.get(page, 'subtitle');
-        const headerImage = _.get(page, 'img_path') ? _.get(page, 'img_path') : _.get(header, 'background_img');
-        const markdownContent = _.get(page, 'markdown_content');
-        const formId = _.get(page, 'form_id');
-        const formAction = _.get(page, 'form_action');
-        const formFields = _.get(page, 'form_fields');
-        const submitLabel = _.get(page, 'submit_label');
+        const headerImage = _.get(page, 'img_path.url') ? _.get(page, 'img_path') : _.get(header, 'background_img');
+        const markdownContent = _.get(page, 'content[0].markdown_content');
+        const formId = _.get(page, 'content[0].form_id');
+        const formAction = _.get(page, 'content[0].form_action');
+        const formFields = _.get(page, 'content[0].form_fields');
+        const submitLabel = _.get(page, 'content[0].submit_label');
         const formHoneypotInputId = formId + '-honeypot';
         const formHoneypotLabelId = formId + '-honeypot-label';
         const formHoneypotName = formId + '-bot-field';
@@ -40,14 +41,14 @@ export default class Contact extends React.Component {
                                 <form
                                     name={formId}
                                     id={formId}
-                                    {...(formAction ? ({ action: formAction }) : null)}
+                                    {...(formAction ? { action: formAction } : null)}
                                     method="POST"
                                     data-netlify="true"
                                     data-netlify-honeypot={formHoneypotName}
                                 >
                                     <div className="screen-reader-text">
                                         <label id={formHoneypotLabelId} htmlFor={formHoneypotInputId}>
-                                            Don't fill this out if you're human: 
+                                            Don't fill this out if you're human:
                                             <input aria-labelledby={formHoneypotLabelId} id={formHoneypotInputId} name={formHoneypotName} />
                                         </label>
                                     </div>
@@ -56,7 +57,9 @@ export default class Contact extends React.Component {
                                         <FormField key={index} field={field} />
                                     ))}
                                     <div className="form-submit">
-                                        <button type="submit" className="button">{submitLabel}</button>
+                                        <button type="submit" className="button">
+                                            {submitLabel}
+                                        </button>
                                     </div>
                                 </form>
                             </div>

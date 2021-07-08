@@ -92,6 +92,7 @@ export default class Header extends React.Component {
                         <div className="site-header-bg-gradient" />
                     </div>
                 )}
+                
                 <div className="site-header-scroll">
                     <div className="site-header-inside">
                         <div className="site-header-vertical">

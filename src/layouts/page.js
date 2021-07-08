@@ -19,6 +19,7 @@ export default class Page extends React.Component {
 
         return (
             <Layout page={page} config={config}>
+                {console.log(page)}
                 <Header config={config} page={page} image={headerImage} />
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
