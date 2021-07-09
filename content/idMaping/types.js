@@ -1,5 +1,13 @@
 export const data = [
     {
+        id:"1",
+        name:"/",
+        fields:`... on ComponentSectionsHome{
+            more_link_text,
+            has_more_link
+        }`
+    },
+    {
         id: 2,
         name: 'contact',
         fields: ` ... on ComponentSectionsContact {

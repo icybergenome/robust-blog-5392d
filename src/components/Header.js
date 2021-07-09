@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import _ from 'lodash';
-
+import {getStrapiMedia} from '../utils/strapiMedia'
 import { getPageUrl, classNames, Link, withPrefix } from '../utils';
 import Action from './Action';
 import ActionIcon from './ActionIcon';
@@ -70,12 +70,12 @@ export default class Header extends React.Component {
 
     render() {
         const image = _.get(this.props, 'image');
-        const page = _.get(this.props, 'page');
+        const page = _.get(this.props, 'page.page');
         const pageUrl = _.trim(getPageUrl(page), '/');
         const pageLayout = _.get(page, 'layout');
         const config = _.get(this.props, 'config');
-        const header = _.get(config, 'header');
-        const logo = _.get(header, 'logo_img');
+        const header = _.get(this.props, 'page.header.header');
+        const logo = getStrapiMedia( _.get(header, 'logo_img'));
         const logoAlt = _.get(header, 'logo_img_alt', '');
         const title = _.get(header, 'title');
         const tagline = _.get(header, 'tagline');
