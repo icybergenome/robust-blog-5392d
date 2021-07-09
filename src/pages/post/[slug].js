@@ -27,7 +27,7 @@ class Post extends React.Component {
         const hideHeader = _.get(post, 'hide_header');
         const title = _.get(post, 'title');
         const subtitle = _.get(post, 'subtitle');
-        const headerImage = _.get(post, 'content_img_path') ? getStrapiMedia(_.get(post, 'content_img_path')) : '';
+        const headerImage = _.get(header, 'background_img') ? getStrapiMedia(_.get(header, 'background_img')) : '';
         const date = _.get(post, 'date');
         const thumbImage = _.get(post, 'thumb_img_path') ? getStrapiMedia(_.get(post, 'thumb_img_path')) : '';
         const thumbImageAlt = _.get(post, 'thumb_img_path.alternativeText') ? _.get(post, 'thumb_img_path.alternativeText') : '';
@@ -38,7 +38,7 @@ class Post extends React.Component {
         console.log(this.props);
         return (
             <>
-                {hideHeader ? <HeaderAlt /> : <Header config={config} page={page} image={headerImage} />}
+                {hideHeader ? <HeaderAlt /> : <Header config={config} page={this.props} image={headerImage} />}
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
                         <article className="post post-full">

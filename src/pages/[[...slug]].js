@@ -5,14 +5,11 @@ import { withRemoteDataUpdates } from 'sourcebit-target-next/with-remote-data-up
 import { getPage } from '../utils/data/getPage';
 import { data } from '../../content/idMaping/types';
 import { getHeader } from '../utils/data/getConfigurations';
-import {getPosts} from '../utils/data/getPosts'
+import { getPosts } from '../utils/data/getPosts';
 import pageLayouts from '../layouts';
-import {useRouter} from 'next/router'
 
 class Page extends React.Component {
-    
     render() {
-       
         const modelName = _.get(this.props.page, 'page.model_name');
         // const modelName = _.get(this.props, 'page.__metadata.modelName');
 
@@ -32,11 +29,11 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
     // const pagePath = '/' + (params.slug ? params.slug.join('/') : '');
     // const props = await sourcebitDataClient.getStaticPropsForPageAtPath(pagePath);
-    const slug = data.find((d) => (d.name ===( params.slug ? params.slug[0] : '/')));
+    const slug = data.find((d) => d.name === (params.slug ? params.slug[0] : '/'));
     const props = {
         page: await getPage({ id: slug.id, fields: slug.fields }),
         header: await getHeader(),
-        posts:await getPosts()
+        posts: await getPosts()
     };
     return { props };
 }

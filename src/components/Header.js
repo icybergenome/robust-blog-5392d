@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import _ from 'lodash';
-import {getStrapiMedia} from '../utils/strapiMedia'
+import { getStrapiMedia } from '../utils/strapiMedia';
 import { getPageUrl, classNames, Link, withPrefix } from '../utils';
 import Action from './Action';
 import ActionIcon from './ActionIcon';
@@ -63,7 +63,9 @@ export default class Header extends React.Component {
     renderSocialLinks(socialLinks) {
         return (
             <div className="social-links">
-                {_.map(socialLinks, (action, index) => <ActionIcon key={index} action={action} />)}
+                {_.map(socialLinks, (action, index) => (
+                    <ActionIcon key={index} action={action} />
+                ))}
             </div>
         );
     }
@@ -75,7 +77,7 @@ export default class Header extends React.Component {
         const pageLayout = _.get(page, 'layout');
         const config = _.get(this.props, 'config');
         const header = _.get(this.props, 'page.header.header');
-        const logo = getStrapiMedia( _.get(header, 'logo_img'));
+        const logo = getStrapiMedia(_.get(header, 'logo_img'));
         const logoAlt = _.get(header, 'logo_img_alt', '');
         const title = _.get(header, 'title');
         const tagline = _.get(header, 'tagline');
@@ -92,14 +94,27 @@ export default class Header extends React.Component {
                         <div className="site-header-bg-gradient" />
                     </div>
                 )}
-                
+
                 <div className="site-header-scroll">
                     <div className="site-header-inside">
                         <div className="site-header-vertical">
                             <div className="site-branding">
-                                {logo && <p className="site-logo"><Link href={withPrefix('/')}><img src={withPrefix(logo)} alt={logoAlt} /></Link></p>}
-                                {pageLayout === 'home' ? <h1 className="site-title"><Link href={withPrefix('/')}>{title}</Link></h1>
-                                    : <p className="site-title"><Link href={withPrefix('/')}>{title}</Link></p>}
+                                {logo && (
+                                    <p className="site-logo">
+                                        <Link href={withPrefix('/')}>
+                                            <img src={withPrefix(logo)} alt={logoAlt} />
+                                        </Link>
+                                    </p>
+                                )}
+                                {pageLayout === 'home' ? (
+                                    <h1 className="site-title">
+                                        <Link href={withPrefix('/')}>{title}</Link>
+                                    </h1>
+                                ) : (
+                                    <p className="site-title">
+                                        <Link href={withPrefix('/')}>{title}</Link>
+                                    </p>
+                                )}
                                 {tagline && <p className="site-description">{tagline}</p>}
                             </div>
                             {((hasNav && !_.isEmpty(navLinks)) || (hasSocial && !_.isEmpty(socialLinks))) && (

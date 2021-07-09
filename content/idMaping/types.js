@@ -1,8 +1,8 @@
 export const data = [
     {
-        id:"1",
-        name:"/",
-        fields:`... on ComponentSectionsHome{
+        id: '1',
+        name: '/',
+        fields: `... on ComponentSectionsHome{
             more_link_text,
             has_more_link
         }`
@@ -22,6 +22,27 @@ export const data = [
             }
             submit_label
             markdown_content
+        }`
+    },
+    {
+        id: 3,
+        name: 'about',
+        fields: `... on ComponentSectionsAbout{
+            marked_content
+        }`
+    },
+    {
+        id: 4,
+        name: 'style-guide',
+        fields: `... on ComponentSectionsStyleGuide{
+            marked_content
+        }`
+    },
+    {
+        id: 5,
+        name: 'success',
+        fields: `... on ComponentSectionsSuccess{
+            marked_content
         }`
     }
 ];
