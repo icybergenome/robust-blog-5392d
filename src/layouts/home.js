@@ -9,8 +9,8 @@ import { getPageUrl, Link, withPrefix } from '../utils';
 export default class Home extends React.Component {
     renderPost(post, index, hasMoreLink, moreLinkText) {
         const title = _.get(post, 'title');
-        const thumbImage = getStrapiMedia(_.get(post, 'thumb_img_path'));
-        const thumbImageAlt = _.get(post, 'thumb_img_path.alternativeText', '');
+        const thumbImage = getStrapiMedia(_.get(post, 'cover_img'));
+        const thumbImageAlt = _.get(post, 'cover_img.alternativeText', '');
         const excerpt = _.get(post, 'subtitle');
         const date = _.get(post, 'date');
         const dateTimeAttr = moment(date).strftime('%Y-%m-%d %H:%M');

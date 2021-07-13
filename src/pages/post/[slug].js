@@ -29,11 +29,11 @@ class Post extends React.Component {
         const subtitle = _.get(post, 'subtitle');
         const headerImage = _.get(header, 'background_img') ? getStrapiMedia(_.get(header, 'background_img')) : '';
         const date = _.get(post, 'date');
-        const thumbImage = _.get(post, 'thumb_img_path') ? getStrapiMedia(_.get(post, 'thumb_img_path')) : '';
-        const thumbImageAlt = _.get(post, 'thumb_img_path.alternativeText') ? _.get(post, 'thumb_img_path.alternativeText') : '';
+        const thumbImage = _.get(post, 'cover_img') ? getStrapiMedia(_.get(post, 'cover_img')) : '';
+        const thumbImageAlt = _.get(post, 'cover_img.alternativeText') ? _.get(post, 'cover_img.alternativeText') : '';
         const dateTimeAttr = moment(date).strftime('%Y-%m-%d %H:%M');
         const formattedDate = moment(date).strftime('%B %d, %Y');
-        const postDetail = _.get(post, 'post_detail');
+        const postDetail = _.get(post, 'postDetail');
         const markdownContent = _.get(post, 'markdown_content');
         console.log(this.props);
         return (
@@ -54,37 +54,35 @@ class Post extends React.Component {
                             {subtitle && <div className="post-subtitle">{htmlToReact(subtitle)}</div>}
                             {thumbImage && <img className="thumbnail" src={withPrefix(thumbImage)} alt={thumbImageAlt} />}
                             {postDetail &&
-                                _.map(postDetail, (detail, index) => {
-                                    console.log(detail);
-                                    if (detail.description && detail.image) {
-                                        return (
-                                            <div key={index}>
+                                _.map(postDetail, ({ __typename, image, video, description, url }, index) => {
+                                    console.log(getStrapiMedia(video));
+                                    switch (__typename) {
+                                        case 'ComponentBasicImage':
+                                            return (
                                                 <img
+                                                    key={index}
                                                     style={{ marginTop: '2rem' }}
                                                     className="thumbnail"
-                                                    src={withPrefix(getStrapiMedia(detail.image))}
-                                                    alt={detail.image.alternativeText}
+                                                    src={withPrefix(getStrapiMedia(image))}
+                                                    alt={image.alternativeText}
                                                 />
-                                                <div style={{ marginTop: '2rem' }} className="post-content">
-                                                    {markdownify(detail.description)}
+                                            );
+                                        case 'ComponentBasicDescription':
+                                            return (
+                                                <div key={index} style={{ marginTop: '2rem' }} className="post-content">
+                                                    {markdownify(description)}
                                                 </div>
-                                            </div>
-                                        );
-                                    } else if (detail.image) {
-                                        return (
-                                            <img
-                                                style={{ marginTop: '2rem' }}
-                                                className="thumbnail"
-                                                src={withPrefix(getStrapiMedia(detail.image))}
-                                                alt={detail.image.alternativeText}
-                                            />
-                                        );
-                                    } else if (detail.description) {
-                                        return (
-                                            <div style={{ marginTop: '2rem' }} className="post-content">
-                                                {markdownify(detail.description)}
-                                            </div>
-                                        );
+                                            );
+
+                                        case 'ComponentBasicVideo':
+                                            return (
+                                                <video style={{ width: '100%', height: '400px' }} controls>
+                                                    <source src={getStrapiMedia(video)}></source>
+                                                </video>
+                                            );
+                                        case 'ComponentBasicVideoWithUrl':
+                                            return <iframe style={{ width: '100%', height: '400px' }} src={url}></iframe>;
+                                        default:
                                     }
                                 })}
                         </article>

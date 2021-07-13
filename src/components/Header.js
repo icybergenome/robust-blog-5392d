@@ -78,7 +78,7 @@ export default class Header extends React.Component {
         const config = _.get(this.props, 'config');
         const header = _.get(this.props, 'page.header.header');
         const logo = getStrapiMedia(_.get(header, 'logo_img'));
-        const logoAlt = _.get(header, 'logo_img_alt', '');
+        const logoAlt = _.get(header, 'logo_img.alternativeText', '');
         const title = _.get(header, 'title');
         const tagline = _.get(header, 'tagline');
         const hasNav = _.get(header, 'has_nav');

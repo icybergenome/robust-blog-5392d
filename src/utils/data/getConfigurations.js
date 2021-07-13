@@ -12,10 +12,11 @@ export const getHeader = async () => {
                 tagline
                 logo_img {
                     url
+                    alternativeText
                 }
-                logo_img_alt
                 background_img {
                     url
+                    alternativeText
                 }
                 has_nav
                 nav_links {

@@ -11,7 +11,7 @@ export const getPosts = async () => {
                 title
                 subtitle
                 date
-                thumb_img_path {
+                cover_img {
                     url
                     alternativeText
                     caption
@@ -32,14 +32,30 @@ export const getPosts = async () => {
                 layout
                 slug
                 published_at
-                post_detail {
-                    ... on ComponentSectionsPostDetail {
+                postDetail {
+                    __typename
+                    ... on ComponentBasicImage {
                         image {
                             url
                             alternativeText
                             caption
                         }
+                    }
+                    __typename
+                    ... on ComponentBasicDescription {
                         description
+                    }
+                    __typename
+                    ... on ComponentBasicVideo {
+                        video {
+                            url
+                            caption
+                            alternativeText
+                        }
+                    }
+                    __typename
+                    ... on ComponentBasicVideoWithUrl {
+                        url
                     }
                 }
             }
