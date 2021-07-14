@@ -16,7 +16,6 @@ export default class Home extends React.Component {
         const dateTimeAttr = moment(date).strftime('%Y-%m-%d %H:%M');
         const formattedDate = moment(date).strftime('%B %d, %Y');
         const postUrl = getPageUrl(post, { withPrefix: true });
-
         return (
             <article key={index} className="post">
                 <header className="post-header">
@@ -58,6 +57,7 @@ export default class Home extends React.Component {
         const headerImage = getStrapiMedia(_.get(header, 'background_img'));
         const page = _.get(this.props, 'page.page');
         const hasMoreLink = _.get(page, 'page.has_more_link');
+        const categories = _.get(this.props, 'categories.category.categories');
 
         const moreLinkText = _.get(page, 'page.more_link_text');
         const posts = _.orderBy(_.get(this.props, 'posts.posts', []), 'published_at', 'desc');
@@ -65,6 +65,19 @@ export default class Home extends React.Component {
             <Layout page={page} config={config}>
                 <Header config={config} page={this.props} image={headerImage} />
                 <div id="content" className="site-content">
+                    <h4>Categories</h4>
+
+                    <div className="categories_container">
+                        {categories &&
+                            _.map(categories, ({ category_name, category_color, category_key }, index) => {
+                                console.log(category_name);
+                                return (
+                                    <div style={{ backgroundColor: category_color }} className="cagtegory_tag" key={index}>
+                                        {category_name}
+                                    </div>
+                                );
+                            })}
+                    </div>
                     <main id="main" className="site-main inner">
                         <div className="post-feed">{_.map(posts, (post, index) => this.renderPost(post, index, hasMoreLink, moreLinkText))}</div>
                     </main>

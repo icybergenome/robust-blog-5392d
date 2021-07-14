@@ -43,3 +43,20 @@ export const getHeader = async () => {
     const header = await getGraphQLClient().request(query);
     return header;
 };
+
+export const getCategories = async () => {
+    const query = gql`
+        query category {
+            category {
+                categories {
+                    category_name
+                    category_key
+                    category_color
+                }
+            }
+        }
+    `;
+
+    const categories = await getGraphQLClient().request(query);
+    return categories;
+};

@@ -4,7 +4,7 @@ import { sourcebitDataClient } from 'sourcebit-target-next';
 import { withRemoteDataUpdates } from 'sourcebit-target-next/with-remote-data-updates';
 import { getPage } from '../utils/data/getPage';
 import { data } from '../../content/idMaping/types';
-import { getHeader } from '../utils/data/getConfigurations';
+import { getHeader, getCategories } from '../utils/data/getConfigurations';
 import { getPosts } from '../utils/data/getPosts';
 import pageLayouts from '../layouts';
 
@@ -33,7 +33,8 @@ export async function getStaticProps({ params }) {
     const props = {
         page: await getPage({ id: slug.id, fields: slug.fields }),
         header: await getHeader(),
-        posts: await getPosts()
+        posts: await getPosts(),
+        categories: await getCategories()
     };
     return { props };
 }
