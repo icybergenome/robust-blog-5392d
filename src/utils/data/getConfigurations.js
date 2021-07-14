@@ -46,13 +46,11 @@ export const getHeader = async () => {
 
 export const getCategories = async () => {
     const query = gql`
-        query category {
-            category {
-                categories {
-                    category_name
-                    category_key
-                    category_color
-                }
+        query categories {
+            categories {
+                category_name
+                category_key
+                category_color
             }
         }
     `;

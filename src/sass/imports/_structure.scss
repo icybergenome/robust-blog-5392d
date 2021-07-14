@@ -18,6 +18,23 @@
     max-width: 750px;
 }
 
+.categories_box {
+    @media only screen and (max-width: 500px) {
+        display: none;
+    }
+
+    @media only screen and (min-width: 801px) {
+        margin-left: 0%;
+    }
+
+    @media only screen and (min-width: 1091px) {
+        margin-left: 5%;
+    }
+
+    @media only screen and (min-width: 1501px) {
+        margin-left: 10%;
+    }
+}
 .cagtegory_tag {
     width: max-content;
     padding: 0px 10px;
