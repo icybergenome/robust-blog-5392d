@@ -6,7 +6,7 @@ import { Layout } from '../../components/index';
 import Header from '../../components/Header';
 import HeaderAlt from '../../components/HeaderAlt';
 import { getPosts } from '../../utils/data/getPosts';
-import { getHeader } from '../../utils/data/getConfigurations';
+import { getCategories, getHeader } from '../../utils/data/getConfigurations';
 import Footer from '../../components/Footer';
 import { htmlToReact, markdownify, withPrefix } from '../../utils';
 import { getStrapiMedia } from '../../utils/strapiMedia';
@@ -22,8 +22,7 @@ class Post extends React.Component {
         const data = _.get(this.props, 'data');
         const config = _.get(data, 'config');
         const header = _.get(this.props, 'header.header');
-        console.log(post);
-        const page = _.get(this.props, 'page');
+        const categories = _.get(this.props, 'categories.categories');
         const hideHeader = _.get(post, 'hide_header');
         const title = _.get(post, 'title');
         const subtitle = _.get(post, 'subtitle');
@@ -34,8 +33,9 @@ class Post extends React.Component {
         const dateTimeAttr = moment(date).strftime('%Y-%m-%d %H:%M');
         const formattedDate = moment(date).strftime('%B %d, %Y');
         const postDetail = _.get(post, 'postDetail');
-        const markdownContent = _.get(post, 'markdown_content');
-        console.log(this.props);
+        const category = _.find(categories, function (d) {
+            return d.category_key === post.category;
+        });
         return (
             <>
                 {hideHeader ? <HeaderAlt /> : <Header config={config} page={this.props} image={headerImage} />}
@@ -44,6 +44,9 @@ class Post extends React.Component {
                         <article className="post post-full">
                             <header className="post-header">
                                 <h1 className="post-title">{title}</h1>
+                                <div style={{ backgroundColor: category ? category.category_color : '' }} className="cagtegory_tag">
+                                    {category && category.category_name}
+                                </div>
                                 <div className="post-meta">
                                     Published on{' '}
                                     <time className="published" dateTime={dateTimeAttr}>
@@ -95,7 +98,7 @@ class Post extends React.Component {
 }
 
 export const getServerSideProps = async (context) => {
-    const props = { posts: await getPosts(), header: await getHeader() };
+    const props = { posts: await getPosts(), header: await getHeader(), categories: await getCategories() };
 
     return { props };
 };

@@ -32,6 +32,7 @@ export const getPosts = async () => {
                 layout
                 slug
                 published_at
+                category
                 postDetail {
                     __typename
                     ... on ComponentBasicImage {
