@@ -1,14 +1,38 @@
 import {
-    ApolloClient,
-    InMemoryCache,
-    useQuery,
-    gql
-  } from "@apollo/client";
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client";
+
+import { setContext } from '@apollo/client/link/context';
+import { isValid } from "../helpers/isValid";
+
+
+const httpLink = createHttpLink({
+  uri: `http://localhost:1337/graphql`,
+});
+
+
+const authLink = setContext((_, { headers }) => {
+  let token = localStorage.getItem('jwtToken');
+  const userInfo = localStorage.getItem("userInfo")
+
+  const valid = isValid(token)
+
+  // token = valid.valid && valid.user_id == userInfo.id ? token : ''
+
+  console.log("Apollo token",token)
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
+
 
 export const client = new ApolloClient({
-    uri: 'http://localhost:1337/graphql',
-    cache: new InMemoryCache(),
-    headers: {
-        Authorization: `Bearer ${process.env.AUTH_TOKEN_C}`,
-    },
-  });
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
