@@ -42,18 +42,46 @@ export const CREATE_POST = gql`
     }
   }
   `;
-    // const cms = useCMS();
-    // await getGraphQLClient().request(create, variables);
-    
-    // router.push('/');
-    // const [createPost, { loading,data, error }] = useMutation(create);
-    // createPost({variables});
-//   cms.alerts.success('Post Added Successfully');
-//   try{
-//     await getGraphQLClient().request(create, variables);
-//     cms.alerts.success('Post Added Successfully');
-//     // router.push('/');
-// }catch(e){
-//   console.log(e);
-// }
+
+export const LOGIN = gql`
+  mutation login($input: UsersPermissionsLoginInput!){
+    login(input: $input){
+        jwt,
+        user { 
+            id
+            blocked 
+            confirmed 
+            username 
+            email
+            role{
+                id
+                name
+                description
+                type
+            }
+        }
+    }
+  }
+  `;
+
+export const REGISTER = gql`
+  mutation register($input: UsersPermissionsRegisterInput!){
+    register(input: $input){
+      jwt
+      user { 
+        id
+        blocked 
+        confirmed 
+        username 
+        email
+        role{
+            id
+            name
+            description
+            type
+        }
+    }
+    }
+  }
+  `;
 
