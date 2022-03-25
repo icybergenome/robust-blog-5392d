@@ -35,10 +35,10 @@ h4,
 h5,
 h6 {
     color: _palette(secondary);
-    font-weight: bold;
-    line-height: 1.2;
-    margin: 1.66667rem 0 0.83333rem;
-    text-rendering: optimizeLegibility;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+    margin: 1.66667rem 0 0.83333rem !important;
+    text-rendering: optimizeLegibility !important;
 
     &:first-child {
         margin-top: 0;
@@ -46,33 +46,33 @@ h6 {
 }
 
 h1 {
-    font-size: 2.22222rem;
+    font-size: 2.22222rem !important;
 }
 
 h2 {
-    font-size: 1.88889rem;
+    font-size: 1.88889rem !important;
 }
 
 h3 {
-    font-size: 1.55556rem;
+    font-size: 1.55556rem !important;
 }
 
 h4 {
-    font-size: 1.33333rem;
+    font-size: 1.33333rem !important;
 }
 
 h5 {
-    font-size: 1.11111rem;
+    font-size: 1.11111rem !important;
 }
 
 h6 {
-    font-size: 0.88889em;
-    letter-spacing: 0.0625em;
-    text-transform: uppercase;
+    font-size: 0.88889em !important;
+    letter-spacing: 0.0625em !important;
+    text-transform: uppercase !important;
 }
 
 p {
-    margin: 0 0 1.66667em;
+    margin: 0 0 1.66667em !important;
 }
 
 address {
