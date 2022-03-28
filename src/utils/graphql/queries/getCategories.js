@@ -1,12 +1,11 @@
+import { gql } from "@apollo/client";
 
-import { GET_CATEGORIES } from "./get"
-import { useQuery } from "@apollo/client"
-
-
-
- export const getCategory = () => {
-    const  { loading,data,error } = useQuery(GET_CATEGORIES)
-    console.log("In categories",data)
-    return data
-
- }
+export const GET_CATEGORIES = gql`
+        query categories($where: JSON) {
+            categories(where: $where) {
+                category_name
+                category_key
+                category_color
+            }
+        }
+    `;
