@@ -49,8 +49,6 @@ const AuthProvider = ({ children }) => {
         return false;
     }else{
         const authToken  = localStorage.getItem("jwtToken")
-        console.log("auth Stateeeee11", authState)
-        console.log("auth tokennn11", authToken)
         const valid = isValid(authToken)
         console.log("Auth state token",valid)
         if(valid.valid && valid.user_id == userInfo.id){
