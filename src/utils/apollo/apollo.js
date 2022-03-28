@@ -14,10 +14,14 @@ const httpLink = createHttpLink({
 
 
 const authLink = setContext((_, { headers }) => {
-  let token = localStorage.getItem('jwtToken');
-  const userInfo = localStorage.getItem("userInfo")
-
-  const valid = isValid(token)
+  let token = ''
+  try{
+    token = localStorage.getItem('jwtToken');
+    // const userInfo = localStorage.getItem("userInfo")
+    // const valid = isValid(token)
+  }catch(e){
+    console.log(e.message)
+  }
 
   // token = valid.valid && valid.user_id == userInfo.id ? token : ''
 
