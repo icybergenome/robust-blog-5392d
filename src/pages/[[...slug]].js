@@ -5,7 +5,7 @@ import { withRemoteDataUpdates } from 'sourcebit-target-next/with-remote-data-up
 import { getPage } from '../utils/data/getPage';
 import { data } from '../../content/idMaping/types';
 import { getHeader, getCategories } from '../utils/data/getConfigurations';
-import { GET_POSTS } from '../utils/graphql/queries/get';
+import { GET_POSTS } from '../utils/graphql/queries/getPosts';
 import { useQuery } from '@apollo/client';
 import pageLayouts from '../layouts';
 
