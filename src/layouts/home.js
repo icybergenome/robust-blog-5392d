@@ -6,6 +6,7 @@ import { Layout } from '../components/index';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getPageUrl, Link, withPrefix } from '../utils';
+import { post } from '.';
 export default class Home extends React.Component {
     renderPost(post, index, hasMoreLink, moreLinkText) {
         const title = _.get(post, 'title');
@@ -60,22 +61,22 @@ export default class Home extends React.Component {
         const categories = _.get(this.props, 'categories.categories');
 
         const moreLinkText = _.get(page, 'page.more_link_text');
-        const posts = _.orderBy(_.get(this.props, 'posts.posts', []), 'published_at', 'desc');
-        console.log(categories);
+        const posts = _.orderBy(_.get(this.props, 'posts', []), 'published_at', 'desc');
+        // console.log("POST SSS",posts[0]);
         return (
             <Layout page={page} config={config}>
                 <Header config={config} page={this.props} image={headerImage} />
                 <div id="content" className="site-content">
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <main id="main" className="site-main inner">
-                            <div className="post-feed">{_.map(posts, (post, index) => this.renderPost(post, index, hasMoreLink, moreLinkText))}</div>
+                            <div className="post-feed">{_.map(posts[0], (post, index) => this.renderPost(post, index, hasMoreLink, moreLinkText))}</div>
                         </main>
                         <div className="categories_box">
                             <h4>Categories</h4>
                             <div className="categories_container">
                                 {categories &&
                                     _.map(categories, ({ category_name, category_color, category_key }, index) => {
-                                        console.log(category_name);
+                                        // console.log(category_name);
                                         return (
                                             <div style={{ backgroundColor: category_color }} className="cagtegory_tag" key={index}>
                                                 {category_name}
