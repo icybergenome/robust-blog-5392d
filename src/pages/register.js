@@ -9,7 +9,8 @@ const MyRegister = () => {
 
 export async function getStaticProps({ params }) {
   const props = {
-    slug : 'register'
+    slug : 'register',
+    protected: true,
   };
   return { props };
 }
