@@ -4,6 +4,8 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../utils/context/auth-context';
 import Link from 'next/link'
+import { Link as ChakraLink } from "@chakra-ui/react";
+
 import {
   Flex,
   Heading,
@@ -11,38 +13,39 @@ import {
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
   Box,
   Avatar,
+  FormLabel,
+  chakra,
   FormControl,
   FormHelperText,
-  InputRightElement
+  Text,
+  Image
 } from "@chakra-ui/react";
 import { FaEyeSlash,FaEye } from "react-icons/fa";
-
-import { AiOutlineUser } from 'react-icons/ai'
 
 
 const Login = () => {
 
-const [login, {data,loading,error}] = useMutation(LOGIN)
+
+  const [login, {data,loading,error}] = useMutation(LOGIN)
 
 const [userName, setUserName] = useState('');
 const [password, setPassword] = useState('');
-const [showPassword, setShowPassword] = useState(false);
+// const [showPassword, setShowPassword] = useState(false);
 
 const router = useRouter();
 
 const authCtx = useContext(AuthContext)
 
-const handleShowClick = () => setShowPassword(!showPassword);
+// const handleShowClick = () => setShowPassword(!showPassword);
 
 useEffect(() => {
     if(data){
         authCtx.setUserDetails(data.login.user)
         authCtx.setAuthState(data.login.jwt)
         router.push("/")
+        console.log("pushhhh")
     }
 },[data])
 
@@ -51,7 +54,8 @@ const handleUsername = (event) => {
 };
 
 const handlePassword = (event) => {
-    setPassword(event.target.value);
+  console.log(event.target.value)  
+  setPassword(event.target.value);
 };
 
 async function handleSubmitForm(event) {
@@ -80,77 +84,130 @@ async function handleSubmitForm(event) {
     
 }
 
+
   return (
-    <Flex
-      flexDirection="column"
-      width="100wh"
-      height="100vh"
-      backgroundColor="gray.200"
-      justifyContent="center"
-      alignItems="center"
+    <Box
+      bgImage="url('/images/login_banner.jpg')"
+      bgPosition={["","center"]}
+      bgRepeat="no-repeat"
+      bgSize="cover"
     >
-      <Stack
-        flexDir="column"
-        mb="2"
-        justifyContent="center"
-        alignItems="center"
-      >
-         
-        <Avatar bg="linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)" />
-        <Heading color="#DA18A3">Welcome Back, Please Login</Heading>
-        <Box minW={{ base: "90%", md: "468px" }}>
+        <Box d="flex" justifyContent={["center","end"]} alignItems="center" minW={{ base: "90%", md: "539px" }} mr={["0","118px"]}>
           <form onSubmit={handleSubmitForm}>
             <Stack
+              mt="80px"
+              mb="80px"
+              width={["390px","510px"]}
+              height="641px"
               spacing={4}
-              p="1rem"
-              backgroundColor="whiteAlpha.900"
+              px="44px"
+              pt="30px"
+              pb="60px"
+              backgroundColor={["rgba(255,255,255,0.6)","#fff"]}
               boxShadow="md"
+              borderRadius={25}
             >
+              <Flex
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <Box>
+                  <Text
+                    fontWeight="400"
+                    fontSize="21px"
+                    lineHeight="32px"
+                  >
+                    Welcome to <chakra.span color="#779341" fontWeight="600" lineHeight="32px" fontSize="21px">LOREM</chakra.span>
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontSize="13px" color="#8D8D8D" lineHeight="19.5px" mb="0">No Account ?</Text>
+                  <ChakraLink fontSize="14px" lineHeight="19.5px" color="#779341" href="/register">
+                    {/* <Text > */}
+                      Signup
+                    {/* </Text> */}
+                  </ChakraLink>
+                </Box>
+              </Flex>
+              <Text
+                lineHeight="82px"
+                fontSize="55px"
+                fontWeight="500"
+                mt="0"
+                mb="40px"
+              >
+                Sign In
+              </Text>
+              <Box d="flex">
+                <Image 
+                  mr={["10px","20px"]}
+                  borderRadius={9}
+                  src='/images/google_btn.jpg'
+                  height="55px"
+                  width={["200px","298px"]}
+                />
+                <Image 
+                  borderRadius={9}
+                  src='/images/facebook_btn.jpg'
+                  height="55px"
+                  width="60px"
+                />
+                <Image 
+                  borderRadius={9}
+                  src='/images/apple_btn.jpg'
+                  height="55px"
+                  width="60px"
+                />
+              </Box>
               <FormControl>
-                <Input pl="43px" type='text' placeholder='Username' value={userName} onChange={handleUsername} />
+                <FormLabel
+                  mt="25px"
+                  htmlFor='username'
+                  fontSize="16px"
+                  lineHeight="24px"
+                >
+                  Enter your username or email address
+                </FormLabel>
+                <Input bg="#fff" type='text' placeholder='Username' value={userName} onChange={handleUsername} name="username" borderColor="#ADADAD"/>
               </FormControl>
               <FormControl>
-                <InputGroup>
-                  <Input
-                    pl="43px"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password} onChange={handlePassword}
-                  />
-                  <InputRightElement 
-                    width="4.5rem"
+                <FormLabel
+                    mt="10px" 
+                    htmlFor='username'
+                    fontSize="16px"
+                    lineHeight="24px"
                   >
-                    <Button h="1.75rem" size="sm" bg="gray.100" _hover={{bg:"gray.100", color: "#DA18A3"}} onClick={handleShowClick}>
-                        {showPassword ? <FaEye /> : <FaEyeSlash />}
-                    </Button>
-                </InputRightElement>
-                </InputGroup>
-                <FormHelperText textAlign="right">
-                  <Link href="/forgotPassword">Forgot password?</Link>
+                    Enter your password
+                  </FormLabel>
+                  <Input
+                    borderColor="#ADADAD"
+                    type="password"
+                    placeholder="Password"
+                    bg="#fff"
+                    value={password} 
+                    onChange={handlePassword}
+                  />
+                <FormHelperText textAlign="right" color="#4285F4">
+                  <Link href="/forgotPassword" style={{border:"none !important"}}>Forgot password?</Link>
                 </FormHelperText>
               </FormControl>
-              <Button
-                borderRadius={8}
-                type="submit"
-                variant="solid"
-                color="#fff"
-                width="full"
-                bg="linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)"
-                _hover={{bg:"linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)",color:"#fff"}}
-              >
-                Login
-              </Button>
+              <Box d="flex" justifyContent="flex-end" mt="30px !important" mb="40px !important">
+                <Button
+                  borderRadius={8}
+                  type="submit"
+                  variant="solid"
+                  color="#fff"
+                  width="236px"
+                  bg="#779341"
+                  _hover={{bg:"#779341",color:"#fff"}}
+                >
+                  Login
+                </Button>
+              </Box>
             </Stack>
           </form>
         </Box>
-      </Stack>
-      <Box>
-        Doesn't Have An Account?{" "}
-        <Link href="/register">
-          Sign Up
-        </Link>
-      </Box>
-    </Flex>
+    </Box>
   );
 };
 
