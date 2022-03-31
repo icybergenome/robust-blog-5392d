@@ -12,190 +12,237 @@ import {
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
   Box,
   Avatar,
+  FormLabel,
+  chakra,
   FormControl,
   FormHelperText,
-  InputRightElement
+  Text,
+  Image
 } from "@chakra-ui/react";
 import { FaEyeSlash,FaEye } from "react-icons/fa";
 
 
+const Login = () => {
 
-const Register = () => {
 
-const [register,{loading,data,error}] = useMutation(REGISTER)
+  const [register,{loading,data,error}] = useMutation(REGISTER)
 
-const [userName, setUserName] = useState('')
-const [emailAddress, setEmailAddress] = useState('')
-const [password, setPassword] = useState('')
-const [confirmPassword, setConfirmPassword] = useState('')
-
-const [showPassword, setShowPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-const router = useRouter();
-
-const handleShowPass = () => setShowPassword(!showPassword);
-const handleShowConfirmPass = () => setShowConfirmPassword(!showConfirmPassword);
-
-const authCtx = useContext(AuthContext)
-
-useEffect(() => {
-    if(data){
-        authCtx.setUserDetails(data.register.user)
-        authCtx.setAuthState(data.register.jwt)
-        router.push("/")
-    }
-},[data])
-
-const handleUserName = (event) => {
-  console.log("aaa")
-  setUserName(event.target.value)
-}
-
-const handleEmail = (event) => {
-  setEmailAddress(event.target.value)
-}
-
-const handlePassword = (event) => {
-  setPassword(event.target.value)
-}
-
-const handleConfirmPassword = (event) => {
-  setConfirmPassword(event.target.value)
-}
-
-async function handleSubmitForm (event) {
-  event.preventDefault();
+  const [userName, setUserName] = useState('')
+  const [emailAddress, setEmailAddress] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   
-
-  if(password == '' && confirmPassword == ''){
-    console.log('Passwords should not be empty');
-    return
-  }
-  if(password !== confirmPassword){
-    console.log('Passwords should be same');
-    return
-  }
-
-  if(userName !== '' && (emailAddress.includes('@') && emailAddress !== '')){
-    const variables = {
-      input:{
-        username: userName,
-        email: emailAddress,
-        password: password
+  const router = useRouter();
+  
+  const authCtx = useContext(AuthContext)
+  
+  useEffect(() => {
+      if(data){
+          authCtx.setUserDetails(data.register.user)
+          authCtx.setAuthState(data.register.jwt)
+          router.push("/")
       }
+  },[data])
+  
+  const handleUserName = (event) => {
+    console.log("aaa")
+    setUserName(event.target.value)
+  }
+  
+  const handleEmail = (event) => {
+    setEmailAddress(event.target.value)
+  }
+  
+  const handlePassword = (event) => {
+    setPassword(event.target.value)
+  }
+  
+  const handleConfirmPassword = (event) => {
+    setConfirmPassword(event.target.value)
+  }
+  
+  async function handleSubmitForm (event) {
+    event.preventDefault();
+    
+  
+    if(password == '' && confirmPassword == ''){
+      console.log('Passwords should not be empty');
+      return
+    }
+    if(password !== confirmPassword){
+      console.log('Passwords should be same');
+      return
     }
   
-    register({variables});
+    if(userName !== '' && (emailAddress.includes('@') && emailAddress !== '')){
+      const variables = {
+        input:{
+          username: userName,
+          email: emailAddress,
+          password: password
+        }
+      }
     
-    
-    
-    setEmailAddress('')
-    setUserName('')
-    setPassword('')
-    setConfirmPassword('')
-    console.log('Fields not empty');
-  }else{
-    console.log("fields should not be empty")
+      register({variables});
+      
+      
+      
+      setEmailAddress('')
+      setUserName('')
+      setPassword('')
+      setConfirmPassword('')
+      console.log('Fields not empty');
+    }else{
+      console.log("fields should not be empty")
+    }
+  
+  
   }
-
-
-}
-
+  
 
   return (
-    <Flex
-      flexDirection="column"
-      width="100wh"
-      height="100vh"
-      backgroundColor="gray.200"
-      justifyContent="center"
-      alignItems="center"
+    <Box
+      bgImage="url('/images/login_banner.jpg')"
+      bgPosition={["","center"]}
+      bgRepeat="no-repeat"
+      bgSize="cover"
     >
-      <Stack
-        flexDir="column"
-        mb="2"
-        justifyContent="center"
-        alignItems="center"
-      >
-         
-        <Avatar bg="linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)" />
-        <Heading color="#DA18A3">Account Registration</Heading>
-        <Box minW={{ base: "90%", md: "468px" }}>
+        <Box d="flex" justifyContent={["center","end"]} alignItems="center" minW={{ base: "90%", md: "539px" }} mr={["0","118px"]}>
           <form onSubmit={handleSubmitForm}>
             <Stack
+              mt="80px"
+              mb="80px"
+              width={["390px","510px"]}
+              height="750px"
               spacing={4}
-              p="1rem"
-              backgroundColor="whiteAlpha.900"
+              px="44px"
+              pt="30px"
+              pb="60px"
+              backgroundColor={["rgba(255,255,255,0.6)","#fff"]}
               boxShadow="md"
+              borderRadius={25}
             >
-              <FormControl>
-                <Input pl="43px" type='text' placeholder='Username' value={userName} onChange={handleUserName} />
-              </FormControl>
-              <FormControl>
-                <Input pl="43px" type='email' placeholder='Email' value={emailAddress} onChange={handleEmail} />
-              </FormControl>
-              <FormControl>
-                <InputGroup>
-                  <Input
-                    pl="43px"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password} onChange={handlePassword}
-                  />
-                  <InputRightElement 
-                    width="4.5rem"
-                  >
-                    <Button h="1.75rem" size="sm" bg="gray.100" _hover={{bg:"gray.100", color: "#DA18A3"}} onClick={handleShowPass}>
-                        {showPassword ? <FaEye /> : <FaEyeSlash />}
-                    </Button>
-                </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <FormControl>
-                <InputGroup>
-                  <Input
-                    pl="43px"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm Password"
-                    value={confirmPassword} onChange={handleConfirmPassword}
-                  />
-                  <InputRightElement 
-                    width="4.5rem"
-                  >
-                    <Button h="1.75rem" size="sm" bg="gray.100" _hover={{bg:"gray.100", color: "#DA18A3"}} onClick={handleShowConfirmPass}>
-                        {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
-                    </Button>
-                </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Button
-                borderRadius={8}
-                type="submit"
-                variant="solid"
-                color="#fff"
-                width="full"
-                bg="linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)"
-                _hover={{bg:"linear-gradient(101.12deg, #EB1484 27.35%, #C91CC3 99.99%, #C81CC5 100%, #C81CC5 100%)",color:"#fff"}}
+              <Flex
+                flexDirection="row"
+                justifyContent="space-between"
               >
-                Register
-              </Button>
+                <Box>
+                  <Text
+                    fontWeight="400"
+                    fontSize="21px"
+                    lineHeight="32px"
+                  >
+                    Welcome to <chakra.span color="#779341" fontWeight="600" lineHeight="32px" fontSize="21px">LOREM</chakra.span>
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontSize="13px" color="#8D8D8D" lineHeight="19.5px" mb="0">Have An Account ?</Text>
+                  <Link href="/login">
+                    <Text fontSize="14px" lineHeight="19.5px" color="#779341"> Sign in</Text>
+                  </Link>
+                </Box>
+              </Flex>
+              <Text
+                lineHeight="82px"
+                fontSize="55px"
+                fontWeight="500"
+                mt="0"
+                mb="40px"
+              >
+                Sign Up
+              </Text>
+              
+              <FormControl>
+                <FormLabel
+                  mt="25px"
+                  htmlFor='username'
+                  fontSize="16px"
+                  lineHeight="24px"
+                >
+                  Enter your email address
+                </FormLabel>
+                <Input bg="#fff" type='text' placeholder='Username' value={emailAddress} onChange={handleEmail} name="username" borderColor="#ADADAD"/>
+              </FormControl>
+              <Box d="inline-flex">
+              <FormControl mr="20px">
+                <FormLabel
+                  mt="10px"
+                  htmlFor='username'
+                  fontSize="16px"
+                  lineHeight="24px"
+                >
+                  User name
+                </FormLabel>
+                <Input width="98%" bg="#fff" type='text' placeholder='User name' value={userName} onChange={handleUserName} name="username" borderColor="#ADADAD"/>
+              </FormControl>
+              <FormControl>
+                <FormLabel
+                  mt="10px"
+                  htmlFor='username'
+                  fontSize="16px"
+                  lineHeight="24px"
+                >
+                  Contact Number
+                </FormLabel>
+                <Input width="98%" pl={["3px",""]} bg="#fff" type='text' placeholder='Contact Number' name="username" borderColor="#ADADAD"/>
+              </FormControl>
+              </Box>
+              <FormControl>
+                <FormLabel
+                    mt="10px" 
+                    htmlFor='username'
+                    fontSize="16px"
+                    lineHeight="24px"
+                  >
+                    Enter your password
+                  </FormLabel>
+                  <Input
+                    borderColor="#ADADAD"
+                    type="password"
+                    placeholder="Password"
+                    bg="#fff"
+                    value={password} 
+                    onChange={handlePassword}
+                  />
+              </FormControl>
+              <FormControl>
+                <FormLabel
+                    mt="10px" 
+                    htmlFor='username'
+                    fontSize="16px"
+                    lineHeight="24px"
+                  >
+                    Confirm your password
+                  </FormLabel>
+                  <Input
+                    borderColor="#ADADAD"
+                    type="password"
+                    placeholder="Confirm Password"
+                    bg="#fff"
+                    value={confirmPassword} 
+                    onChange={handleConfirmPassword}
+                  />
+              </FormControl>
+              <Box d="flex" justifyContent="flex-end" mt="30px !important" mb="40px !important">
+                <Button
+                  borderRadius={8}
+                  type="submit"
+                  variant="solid"
+                  color="#fff"
+                  width="236px"
+                  bg="#779341"
+                  _hover={{bg:"#779341",color:"#fff"}}
+                >
+                  Sign up
+                </Button>
+              </Box>
             </Stack>
           </form>
         </Box>
-      </Stack>
-      <Box>
-      Already have an account?{" "}
-        <Link href="/login">
-           Login
-        </Link>
-      </Box>
-    </Flex>
+    </Box>
   );
 };
 
-export default Register;
+export default Login;
