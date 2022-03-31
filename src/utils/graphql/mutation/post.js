@@ -85,3 +85,11 @@ export const REGISTER = gql`
   }
   `;
 
+export const ForgotPassword = gql`
+  mutation forgotPassword($email: String!){
+    forgotPassword(email: $email){
+        ok
+    }
+}
+  `;
+
