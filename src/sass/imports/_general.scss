@@ -72,7 +72,7 @@ h6 {
 }
 
 p {
-    margin: 0 0 1.66667em !important;
+    margin: 0 0 1.66667em;
 }
 
 address {
@@ -215,34 +215,34 @@ label {
     margin-bottom: 0.25em;
 }
 
-input[type='text'],
-input[type='password'],
-input[type='email'],
-input[type='tel'],
-input[type='number'],
-input[type='search'],
-input[type='url'],
-select,
-textarea {
-    background: _palette(bg);
-    border: 0;
-    border-radius: 3px;
-    box-shadow: none;
-    box-sizing: border-box;
-    color: _palette(primary);
-    display: inline-block;
-    font-size: 16px;
-    font-weight: normal;
-    line-height: 1.5;
-    max-width: 100%;
-    padding: 0.5em 0.75em;
-    vertical-align: baseline;
-    width: 100%;
+// input[type='text'],
+// input[type='password'],
+// input[type='email'],
+// input[type='tel'],
+// input[type='number'],
+// input[type='search'],
+// input[type='url'],
+// select,
+// textarea {
+//     background: _palette(bg);
+//     border: 0;
+//     border-radius: 3px;
+//     box-shadow: none;
+//     box-sizing: border-box;
+//     color: _palette(primary);
+//     display: inline-block;
+//     font-size: 16px;
+//     font-weight: normal;
+//     line-height: 1.5;
+//     max-width: 100%;
+//     padding: 0.5em 0.75em;
+//     vertical-align: baseline;
+//     width: 100%;
 
-    &:focus {
-        outline: 0;
-    }
-}
+//     &:focus {
+//         outline: 0;
+//     }
+// }
 
 input[type='text'],
 input[type='password'],
