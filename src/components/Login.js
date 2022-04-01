@@ -22,8 +22,10 @@ import {
   Text,
   Image
 } from "@chakra-ui/react";
-import { FaEyeSlash,FaEye } from "react-icons/fa";
 
+import TextField from './TextField';
+import ImageField from './ImageField';
+import InputLabel from './InputLabel';
 
 const Login = () => {
 
@@ -122,11 +124,11 @@ async function handleSubmitForm(event) {
                 </Box>
                 <Box>
                   <Text fontSize="13px" color="#8D8D8D" lineHeight="19.5px" mb="0">No Account ?</Text>
-                  <ChakraLink fontSize="14px" lineHeight="19.5px" color="#779341" href="/register">
-                    {/* <Text > */}
-                      Signup
-                    {/* </Text> */}
-                  </ChakraLink>
+                  <Link href="/register">
+                    <ChakraLink fontSize="14px" lineHeight="19.5px" color="#779341">
+                      Sign up
+                    </ChakraLink>
+                  </Link>
                 </Box>
               </Flex>
               <Text
@@ -139,58 +141,46 @@ async function handleSubmitForm(event) {
                 Sign In
               </Text>
               <Box d="flex">
-                <Image 
+                <ImageField 
                   mr={["10px","20px"]}
                   borderRadius={9}
                   src='/images/google_btn.jpg'
                   height="55px"
                   width={["200px","298px"]}
                 />
-                <Image 
+                <ImageField 
                   borderRadius={9}
                   src='/images/facebook_btn.jpg'
                   height="55px"
                   width="60px"
                 />
-                <Image 
+                <ImageField 
                   borderRadius={9}
                   src='/images/apple_btn.jpg'
                   height="55px"
                   width="60px"
                 />
               </Box>
-              <FormControl>
-                <FormLabel
-                  mt="25px"
-                  htmlFor='username'
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
-                  Enter your username or email address
-                </FormLabel>
-                <Input bg="#fff" type='text' placeholder='Username' value={userName} onChange={handleUsername} name="username" borderColor="#ADADAD"/>
-              </FormControl>
-              <FormControl>
-                <FormLabel
-                    mt="10px" 
-                    htmlFor='username'
-                    fontSize="16px"
-                    lineHeight="24px"
-                  >
-                    Enter your password
-                  </FormLabel>
-                  <Input
-                    borderColor="#ADADAD"
+              <Box mt="25px">
+                <FormControl>
+                  <InputLabel label="Enter your username or email address" htmlFor="username"/>
+                  <TextField type='text' placeholder='Username' value={userName} onChange={handleUsername} />
+                </FormControl>
+                <FormControl>
+                  <InputLabel label="Enter your password" htmlFor="password"/>
+                  <TextField
                     type="password"
                     placeholder="Password"
-                    bg="#fff"
                     value={password} 
                     onChange={handlePassword}
                   />
-                <FormHelperText textAlign="right" color="#4285F4">
-                  <Link href="/forgotPassword" style={{border:"none !important"}}>Forgot password?</Link>
-                </FormHelperText>
-              </FormControl>
+                </FormControl>
+              </Box>
+              <Link href="/forgotPassword">
+                  <ChakraLink fontSize="14px" border="none !important" textAlign="right" color="#4285F4">
+                    Forgot Password
+                  </ChakraLink>
+              </Link>
               <Box d="flex" justifyContent="flex-end" mt="30px !important" mb="40px !important">
                 <Button
                   borderRadius={8}
