@@ -3,7 +3,10 @@ import { REGISTER } from '../utils/graphql/mutation/post';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../utils/context/auth-context';
-import Link from 'next/link'
+import { Link as ChakraLink } from "@chakra-ui/react";
+import Link from 'next/link';
+
+
 
 import {
   Flex,
@@ -19,13 +22,15 @@ import {
   FormControl,
   FormHelperText,
   Text,
-  Image
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import { FaEyeSlash,FaEye } from "react-icons/fa";
 
+import TextField from './TextField';
+import InputLabel from './InputLabel';
 
 const Login = () => {
 
+  const errors = {}
 
   const [register,{loading,data,error}] = useMutation(REGISTER)
 
@@ -33,6 +38,7 @@ const Login = () => {
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [contact, setContact] = useState('')
   
   const router = useRouter();
   
@@ -47,10 +53,14 @@ const Login = () => {
   },[data])
   
   const handleUserName = (event) => {
-    console.log("aaa")
+    
     setUserName(event.target.value)
   }
   
+  const handleContact = (event) => {
+    setContact(event.target.value)
+  }
+
   const handleEmail = (event) => {
     setEmailAddress(event.target.value)
   }
@@ -140,7 +150,9 @@ const Login = () => {
                 <Box>
                   <Text fontSize="13px" color="#8D8D8D" lineHeight="19.5px" mb="0">Have An Account ?</Text>
                   <Link href="/login">
-                    <Text fontSize="14px" lineHeight="19.5px" color="#779341"> Sign in</Text>
+                    <ChakraLink fontSize="14px" lineHeight="19.5px" color="#779341">
+                      Sign in
+                    </ChakraLink>
                   </Link>
                 </Box>
               </Flex>
@@ -153,78 +165,40 @@ const Login = () => {
               >
                 Sign Up
               </Text>
-              
-              <FormControl>
-                <FormLabel
-                  mt="25px"
-                  htmlFor='username'
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
-                  Enter your email address
-                </FormLabel>
-                <Input bg="#fff" type='text' placeholder='Username' value={emailAddress} onChange={handleEmail} name="username" borderColor="#ADADAD"/>
-              </FormControl>
-              <Box d="inline-flex">
-              <FormControl mr="20px">
-                <FormLabel
-                  mt="10px"
-                  htmlFor='username'
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
-                  User name
-                </FormLabel>
-                <Input width="98%" bg="#fff" type='text' placeholder='User name' value={userName} onChange={handleUserName} name="username" borderColor="#ADADAD"/>
-              </FormControl>
-              <FormControl>
-                <FormLabel
-                  mt="10px"
-                  htmlFor='username'
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
-                  Contact Number
-                </FormLabel>
-                <Input width="98%" pl={["3px",""]} bg="#fff" type='text' placeholder='Contact Number' name="username" borderColor="#ADADAD"/>
-              </FormControl>
+              <Box mt="15px">
+                <FormControl>
+                  <InputLabel label="Enter your email address" htmlFor="email"/>
+                  <TextField type='text' placeholder='Email' value={emailAddress} onChange={handleEmail} />
+                </FormControl>
+                <Box d="inline-flex">
+                <FormControl mr="20px">
+                  <InputLabel label="User name" htmlFor="username"/>
+                  <TextField type='text' width="98%" placeholder='User name' value={userName} onChange={handleUserName} />
+                </FormControl>
+                <FormControl>
+                  <InputLabel label="Contact Number" htmlFor="contact"/>
+                  <TextField type='text' width="98%" pl={["3px","15px"]} placeholder='Contact Number' value={contact} onChange={handleContact} />
+                </FormControl>
+                </Box>
+                <FormControl>
+                    <InputLabel label="Enter your password" htmlFor="password"/>
+                    <TextField
+                      type="password"
+                      placeholder="Password"
+                      value={password} 
+                      onChange={handlePassword}
+                    />
+                </FormControl>
+                <FormControl>
+                    <InputLabel label="Confirm your password" htmlFor="confirm_password"/>
+                    <TextField
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword} 
+                      onChange={handleConfirmPassword}
+                    />
+                </FormControl>
               </Box>
-              <FormControl>
-                <FormLabel
-                    mt="10px" 
-                    htmlFor='username'
-                    fontSize="16px"
-                    lineHeight="24px"
-                  >
-                    Enter your password
-                  </FormLabel>
-                  <Input
-                    borderColor="#ADADAD"
-                    type="password"
-                    placeholder="Password"
-                    bg="#fff"
-                    value={password} 
-                    onChange={handlePassword}
-                  />
-              </FormControl>
-              <FormControl>
-                <FormLabel
-                    mt="10px" 
-                    htmlFor='username'
-                    fontSize="16px"
-                    lineHeight="24px"
-                  >
-                    Confirm your password
-                  </FormLabel>
-                  <Input
-                    borderColor="#ADADAD"
-                    type="password"
-                    placeholder="Confirm Password"
-                    bg="#fff"
-                    value={confirmPassword} 
-                    onChange={handleConfirmPassword}
-                  />
-              </FormControl>
               <Box d="flex" justifyContent="flex-end" mt="30px !important" mb="40px !important">
                 <Button
                   borderRadius={8}
