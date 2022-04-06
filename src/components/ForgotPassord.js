@@ -6,6 +6,12 @@ import { AuthContext } from '../utils/context/auth-context';
 import Link from 'next/link'
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { ForgotPassword } from '../utils/graphql/mutation/post'
+import TextField from './TextField';
+import InputLabel from './InputLabel';
+
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+
 
 import {
   Flex,
@@ -15,7 +21,6 @@ import {
   InputGroup,
   Stack,
   Box,
-  Avatar,
   FormLabel,
   chakra,
   FormControl,
@@ -23,15 +28,12 @@ import {
   Text,
   Image
 } from "@chakra-ui/react";
-import { FaEyeSlash,FaEye } from "react-icons/fa";
 
 
 const ForgotPassord = () => {
 
 
-const [resetPassword, {data,loading,error}] = useMutation(ForgotPassword)
-
-const [emailAddress, setEmailAddress] = useState('')
+const [forgotPass, {data,loading,error}] = useMutation(ForgotPassword)
 
 const router = useRouter();
 
@@ -39,39 +41,17 @@ const authCtx = useContext(AuthContext)
 
 
 useEffect(() => {
+  console.log("FORGOT PASSS",data)
     if(data){
         if(data.forgotPassword.ok){
-          router.push('/passwordCode')
+          router.push('/resetPassword')
         }
     }
 },[data])
 
-const handleEmail = (event) => {
-  setEmailAddress(event.target.value)
-};
-
-async function handleSubmitForm(event) {
-    event.preventDefault();
-
-
-    if (emailAddress.includes('@') && emailAddress !== '') {
-
-        const variables = {
-            email: emailAddress
-        }
-        resetPassword({variables})
-        console.log("Before Variables",data)
-        
-        setEmailAddress('')
-        console.log('Fields not empty');
-
-    } else {
-        console.log('Email should not be empty');
-        return
-    }
-    
-}
-
+const validate = Yup.object({
+  email: Yup.string().email('Email is invalid').required('Required'),
+});
 
   return (
     <Box
@@ -79,11 +59,27 @@ async function handleSubmitForm(event) {
       bgPosition={["","center"]}
       bgRepeat="no-repeat"
       bgSize="cover"
+      position="fixed"
+      height="100%"
+      width="100%"
     >
         <Box d="flex" justifyContent={["center","end"]} alignItems="center" minW={{ base: "90%", md: "539px" }} mr={["0","118px"]}>
-          <form onSubmit={handleSubmitForm}>
+          <Formik
+            initialValues={{
+              email: '',
+            }}
+            validationSchema={validate}
+            onSubmit={(values) => {
+            const variables = {
+                email: values.email
+            };
+            forgotPass({ variables });
+
+          }}
+          >
+          <Form>
             <Stack
-              mt="80px"
+              mt={["80px","170px"]}
               mb="80px"
               width={["390px","510px"]}
               height="460px"
@@ -116,18 +112,11 @@ async function handleSubmitForm(event) {
                 mt="0"
                 mb="40px"
               >
-                Reset Password
+                Forgot Password
               </Text>
               <FormControl>
-                <FormLabel
-                  mt="25px"
-                  htmlFor='username'
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
-                  Enter your email address
-                </FormLabel>
-                <Input bg="#fff" type='text' placeholder='Username' value={emailAddress} onChange={handleEmail} name="username" borderColor="#ADADAD"/>
+                <InputLabel htmlFor="email" label="Enter your email address"/>
+                <TextField type='text' placeholder='Email' name="email" />
               </FormControl>
               <Box d="flex" justifyContent="flex-end" mt="30px !important" mb="40px !important">
                 <Button
@@ -143,7 +132,8 @@ async function handleSubmitForm(event) {
                 </Button>
               </Box>
             </Stack>
-          </form>
+          </Form>
+          </Formik>
         </Box>
     </Box>
   );
