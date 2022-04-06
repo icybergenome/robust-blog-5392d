@@ -1,20 +1,21 @@
 import React from 'react'
 import { Input } from '@chakra-ui/react'
-
+import { useField, ErrorMessage } from 'formik' 
 
 export default function TextField(props) {
+
+  const [field, meta] = useField(props)
+  // console.log("Field", meta)
   return (
-    <Input 
-        bg="#fff" 
-        type={props.type} 
-        placeholder={props.placeholder} 
-        value={props.value} 
-        onChange={props.onChange}
-        name={props.name} 
-        borderColor="#ADADAD" 
-        width={props.width ? props.width : "100%"}
-        pl={props.pl ? props.pl : ''}
-        />
-        
+    <>
+      <Input
+        isInvalid={meta.error && meta.touched}
+        errorBorderColor='red.300'
+        {...field} {...props} 
+        bg="#fff"
+        borderColor="#ADADAD"
+      />
+      <ErrorMessage component="div" name={field.name} className="error"/>
+    </>  
   )
 }
