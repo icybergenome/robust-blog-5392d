@@ -93,3 +93,30 @@ export const ForgotPassword = gql`
 }
   `;
 
+
+export const RESET_PASSWORD = gql`
+    mutation ResetPassword(
+        $password: String!
+        $passwordConfirmation: String!
+        $code: String!
+    ) {
+        resetPassword(
+        password: $password
+        passwordConfirmation: $passwordConfirmation
+        code: $code
+        ) {
+        jwt
+        user {
+            id
+            username
+            email
+            confirmed
+            blocked
+            role {
+            name
+            }
+        }
+        }
+    }
+  `;
+
