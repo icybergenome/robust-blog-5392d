@@ -5,22 +5,17 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../utils/context/auth-context';
 import Link from 'next/link'
 import { Link as ChakraLink } from "@chakra-ui/react";
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 import {
   Flex,
-  Heading,
-  Input,
   Button,
-  InputGroup,
   Stack,
   Box,
-  Avatar,
-  FormLabel,
   chakra,
   FormControl,
-  FormHelperText,
   Text,
-  Image
 } from "@chakra-ui/react";
 
 import TextField from './TextField';
@@ -30,17 +25,13 @@ import InputLabel from './InputLabel';
 const Login = () => {
 
 
-  const [login, {data,loading,error}] = useMutation(LOGIN)
+const [login, {data,loading,error}] = useMutation(LOGIN)
 
-const [userName, setUserName] = useState('');
-const [password, setPassword] = useState('');
-// const [showPassword, setShowPassword] = useState(false);
 
 const router = useRouter();
 
 const authCtx = useContext(AuthContext)
 
-// const handleShowClick = () => setShowPassword(!showPassword);
 
 useEffect(() => {
     if(data){
@@ -51,40 +42,13 @@ useEffect(() => {
     }
 },[data])
 
-const handleUsername = (event) => {
-    setUserName(event.target.value);
-};
 
-const handlePassword = (event) => {
-  console.log(event.target.value)  
-  setPassword(event.target.value);
-};
-
-async function handleSubmitForm(event) {
-    event.preventDefault();
+const validate = Yup.object({
+  username: Yup.string().required('Required'),
+  password: Yup.string().required('Required'),
+});
 
 
-    if (userName !== '' && password !== '') {
-
-        const variables = {
-            input:{
-                identifier: userName,
-                password: password
-            }
-        }
-        login({variables})
-        console.log("Before Variables",data)
-        
-        setUserName('')
-        setPassword('')
-        console.log('Fields not empty');
-
-    } else {
-        console.log('Fields should not be empty');
-        return
-    }
-    
-}
 
 
   return (
@@ -95,7 +59,24 @@ async function handleSubmitForm(event) {
       bgSize="cover"
     >
         <Box d="flex" justifyContent={["center","end"]} alignItems="center" minW={{ base: "90%", md: "539px" }} mr={["0","118px"]}>
-          <form onSubmit={handleSubmitForm}>
+          <Formik
+            initialValues={{
+              username: '',
+              password: '',
+            }}
+            validationSchema={validate}
+            onSubmit={(values) => {
+            const variables = {
+                input: {
+                    identifier: values.username,
+                    password: values.password
+                }
+            };
+            login({ variables });
+
+          }}
+          >
+          <Form>
             <Stack
               mt="80px"
               mb="80px"
@@ -164,16 +145,11 @@ async function handleSubmitForm(event) {
               <Box mt="25px">
                 <FormControl>
                   <InputLabel label="Enter your username or email address" htmlFor="username"/>
-                  <TextField type='text' placeholder='Username' value={userName} onChange={handleUsername} />
+                  <TextField type='text' placeholder='Username' name="username" />
                 </FormControl>
                 <FormControl>
                   <InputLabel label="Enter your password" htmlFor="password"/>
-                  <TextField
-                    type="password"
-                    placeholder="Password"
-                    value={password} 
-                    onChange={handlePassword}
-                  />
+                  <TextField type="password" placeholder="Password" name="password" />
                 </FormControl>
               </Box>
               <Link href="/forgotPassword">
@@ -195,7 +171,8 @@ async function handleSubmitForm(event) {
                 </Button>
               </Box>
             </Stack>
-          </form>
+          </Form>
+          </Formik>
         </Box>
     </Box>
   );
