@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import _ from 'lodash';
 import moment from 'moment-strftime';
 import withPageCMS from "../utils/withPageCMS";
-import { useRouter } from "next/router";
 import { Layout } from '../components/index';
 import Header from '../components/Header';
 import { getPosts } from '../utils/data/getPosts';
@@ -13,7 +12,10 @@ import { getStrapiMedia } from '../utils/strapiMedia';
 import { Cache, useMutation,useQuery } from '@apollo/client';
 import { useForm, usePlugin,useCMS } from 'tinacms'
 import { CREATE_POST } from '../utils/graphql/mutation/post';
-import { GET_POSTS } from '../utils/graphql/queries/get';
+import { GET_POSTS } from '../utils/graphql/queries/getPosts';
+import { useRouter } from 'next/router';
+import { AuthContext } from '../utils/context/auth-context';
+
 // import { getCategories } from '../utils/graphql/queries/get';
 
 const NewPost = (props) => {
@@ -68,7 +70,6 @@ const NewPost = (props) => {
         });
     // console.log("data out",data)
     // const categories = getCategories()
-    const router = useRouter();
     const cms = useCMS();
     // let category = [{value:'',label:''}]
     // if(categories){
@@ -193,28 +194,7 @@ const NewPost = (props) => {
               },
             };
             
-            createPost({ variables
-        //         update: (cache, { data: { createPost } }) => {
-        //             const cachedData  = cache.readQuery({ query: GET_POSTS});
-                    
-        //             const postedData = createPost
-                    
-        //             console.log("INSIDE UDPATE FTTTNN",postedData )
-        //             if(cachedData){
-        //                 const updated_data = [...cachedData,postedData]
-        //                 const subData = updated_data;
-        //                 console.log("submitted data",subData)
-        //                 cache.writeQuery({ query: GET_POSTS }, subData);
-        //             }else{
-        //                 const posts = {posts:postedData}
-        //                 console.log("dataaaa",posts)
-        //                 cache.writeQuery({ query: GET_POSTS,data:posts});
-        //                 console.log("successfull")
-        //             }
-                    
-        //   }
-            })
-            // console.log("ON SUBMIT",data)
+            createPost({ variables})
             if(error){
                 cms.alerts.error('Error while adding post');
             }else{
@@ -294,17 +274,17 @@ const NewPost = (props) => {
 }
 
 export async function getServerSideProps({ params }) {
+    console.log("Server side props",params)
     const props = {
         header: await getHeader(),
         posts: await getPosts(),
+        slug: "newPost",
+        protected: true,
     };
+    console.log("New Post props",props)
     return { props };
 }
 
-// export default withPageCMS(NewPost,{
-//   fields: [],
-// }
-// );
 
 export default NewPost
 
