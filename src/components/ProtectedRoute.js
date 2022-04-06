@@ -23,39 +23,41 @@ export default function ProtectedRoute(props) {
     const [error, setIsError] = useState(false) 
 
     const router = useRouter()
-    const { pathname } = router;
-  
     const authContext = useContext(AuthContext);
     const auth = authContext.isUserAuthenticated();
 
     const Component = props.element
 
     useEffect(() => {
+      router.events.on('routeChangeStart', () => setIsLoading(true));
+      router.events.on('routeChangeComplete', () => setIsLoading(false));
 
       console.log("authhhhhh",auth)
-      console.log("slug",props.componentProps.slug)
-      const token = localStorage.getItem("jwtToken")
-      if(!token && (props.componentProps.slug !== 'login' && props.componentProps.slug !== 'register') ){
-        console.log("In login")
-        setIsLoading(false)
-        router.push('/login')
-        return
-      }
-
-      if(token && (props.componentProps.slug === 'login' && props.componentProps.slug === 'register')){
+      console.log("SLUGG",props.componentProps.slug)
+      // const token = localStorage.getItem("jwtToken")
+    
+      
+      if(auth && (props.componentProps.slug === 'login' || props.componentProps.slug === 'register')){
         console.log("In Home")
-        setIsLoading(false)
+        // setIsLoading(true)
         router.push('/')
         return
-      }
+      } 
 
-    }, [auth])
+      if(!auth && (props.componentProps.slug !== 'login' && props.componentProps.slug !== 'register')){
+        console.log("In login")
+        // setIsLoading(true)
+        router.push('/login')
+        return
+    }
+
+    }, [auth,router])
     
 
    return (
      
     <>
-      {isLoading ? <LoadingSpinner isLoading={isLoading}/> : <Component {...props.componentProps}/>} 
+      {isLoading ? <LoadingSpinner /> : <Component {...props.componentProps}/>} 
       
     </>
   )
