@@ -1,8 +1,7 @@
 import React from 'react'
 import { ClipLoader } from 'react-spinners'
 
- const LoadingSpinner = (props) => {
-   console.log("Loaddder",props.isLoading)
+ const LoadingSpinner = () => {
   return (
     <div
     style={{
