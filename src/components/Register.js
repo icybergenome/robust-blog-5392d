@@ -7,6 +7,7 @@ import { Link as ChakraLink } from '@chakra-ui/react';
 import Link from 'next/link';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import ReactGA from "react-ga4";
 
 import {
     Flex,
@@ -36,8 +37,24 @@ const Register = () => {
 
     const authCtx = useContext(AuthContext);
 
+    const eventTrack = (category, action, label) => {
+        ReactGA.event({
+          category: category,
+          action: action,
+          label: label,
+        })
+      }
+
+      useEffect(() => {
+        if(loading){
+          eventTrack("registration","sign_up_requested","register button clicked")
+        }
+      },[loading])
+
+
     useEffect(() => {
         if (data) {
+            eventTrack("registration","sign_up","Success signed up")
             authCtx.setUserDetails(data.register.user);
             authCtx.setAuthState(data.register.jwt);
             router.push('/');
