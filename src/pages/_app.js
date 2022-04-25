@@ -1,26 +1,32 @@
+
 import '../sass/main.scss';
-import { useMemo } from 'react' 
-import { client } from '../utils/apollo/apollo';
+import { useMemo, useState } from 'react' 
+import { client, setToken } from '../utils/apollo/apollo';
 import { ApolloProvider } from '@apollo/client';
 import { GET_POSTS } from '../utils/graphql/mutation/post';
 import { ChakraProvider,ColorModeScript,ColorModeProvider,CSSReset } from '@chakra-ui/react'; 
 // import { MarkdownFieldPlugin } from "react-tinacms-editor";
 import { withTina } from "tinacms";
 import { HtmlFieldPlugin, MarkdownFieldPlugin } from "react-tinacms-editor"
-import { useState,useEffect,useContext } from 'react';
 import { AuthProvider } from '../utils/context/auth-context';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { AuthContext } from '../utils/context/auth-context';
-import { useRouter } from 'next/router';
-import Login from '../components/Login';
+import { useEffect } from 'react';
 
+
+import ReactGA from "react-ga4";
 
  function MyApp({ Component, pageProps }) {
 
-    const router = useRouter()
+    useEffect(() => {
+        
+        ReactGA.initialize(process.env.NEXT_PUBLIC_G);
+        ReactGA.send(window.location.pathname + window.location.search);
+         
+      }, []);
+
     return (
-        <ApolloProvider client={client}>
-            <AuthProvider>
+        <AuthProvider>
+            <ApolloProvider client={client}>
                 <ChakraProvider>
                     <ColorModeScript initialColorMode="light" />
                     <ColorModeProvider options={{
@@ -32,12 +38,10 @@ import Login from '../components/Login';
                         pageProps.protected ? <ProtectedRoute componentProps={pageProps} element={Component}/> : <Component {...pageProps} />
                     }
                 </ChakraProvider>
-            
-            </AuthProvider>
-        </ApolloProvider>
+            </ApolloProvider>
+        </AuthProvider>
     )
 }
-// (pageSlug == 'login' || pageSlug == 'register') && !token ? <Login /> : 
 export default withTina(MyApp, {
     plugins: [MarkdownFieldPlugin],
     enabled: true,
