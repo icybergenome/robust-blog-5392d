@@ -62,7 +62,6 @@ export default class Home extends React.Component {
 
         const moreLinkText = _.get(page, 'page.more_link_text');
         const posts = _.orderBy(_.get(this.props, 'posts', []), 'published_at', 'desc');
-        // console.log("POST SSS",posts[0]);
         return (
             <Layout page={page} config={config}>
                 <Header config={config} page={this.props} image={headerImage} />
