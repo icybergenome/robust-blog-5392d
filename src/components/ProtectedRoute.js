@@ -19,6 +19,9 @@ import LoadingSpinner from './LoadingSpinner';
 
 
 export default function ProtectedRoute(props) {
+
+
+  
     const [isLoading, setIsLoading] = useState(false) 
     const [error, setIsError] = useState(false) 
 
@@ -32,24 +35,20 @@ export default function ProtectedRoute(props) {
       router.events.on('routeChangeStart', () => setIsLoading(true));
       router.events.on('routeChangeComplete', () => setIsLoading(false));
 
-      console.log("authhhhhh",auth)
-      console.log("SLUGG",props.componentProps.slug)
       // const token = localStorage.getItem("jwtToken")
     
       
       if(auth && (props.componentProps.slug === 'login' || props.componentProps.slug === 'register')){
         console.log("In Home")
-        // setIsLoading(true)
         router.push('/')
         return
       } 
 
       if(!auth && (props.componentProps.slug !== 'login' && props.componentProps.slug !== 'register')){
         console.log("In login")
-        // setIsLoading(true)
         router.push('/login')
         return
-    }
+      }
 
     }, [auth,router])
     
