@@ -8,6 +8,7 @@ import { Link as ChakraLink } from "@chakra-ui/react";
 import { ForgotPassword } from '../utils/graphql/mutation/post'
 import TextField from './TextField';
 import InputLabel from './InputLabel';
+import ReactGA from "react-ga4";
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -37,13 +38,26 @@ const [forgotPass, {data,loading,error}] = useMutation(ForgotPassword)
 
 const router = useRouter();
 
-const authCtx = useContext(AuthContext)
+const eventTrack = (category, action, label) => {
+  ReactGA.event({
+    category: category,
+    action: action,
+    label: label,
+  })
+}
 
 
 useEffect(() => {
-  console.log("FORGOT PASSS",data)
+    if(loading){
+      eventTrack("authentication","forgot_password_requested","Forgot Password Requested")
+    }
+},[loading])
+
+
+useEffect(() => {
     if(data){
         if(data.forgotPassword.ok){
+          eventTrack("authentication","forgot_password","Forgot Password Success")
           router.push('/resetPassword')
         }
     }
