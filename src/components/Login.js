@@ -22,6 +22,8 @@ import TextField from './TextField';
 import ImageField from './ImageField';
 import InputLabel from './InputLabel';
 
+import ReactGA from "react-ga4";
+
 const Login = () => {
 
 
@@ -33,14 +35,32 @@ const router = useRouter();
 const authCtx = useContext(AuthContext)
 
 
+const eventTrack = (category, action, label) => {
+  ReactGA.event({
+    category: category,
+    action: action,
+    label: label,
+  })
+}
 useEffect(() => {
-    if(data){
+  if(loading){
+    eventTrack("authentication","sign_in_requested","login button clicked")
+  }
+},[loading])
+
+
+useEffect(() => {
+    
+  if(data){
+        eventTrack("authentication","sign_in","Success Signed in")
         authCtx.setUserDetails(data.login.user)
         authCtx.setAuthState(data.login.jwt)
         router.push("/")
-        console.log("pushhhh")
     }
+    
 },[data])
+
+
 
 
 const validate = Yup.object({
