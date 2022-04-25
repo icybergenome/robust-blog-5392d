@@ -22,10 +22,20 @@ const ResetPassword = () => {
 
     const authCtx = useContext(AuthContext);
 
+
+
+    useEffect(() => {
+        if(loading){
+          eventTrack("authentication","reset_password_requested","Reset Password Requested")
+        }
+    },[loading])
+
     useEffect(() => {
         if (data) {
             authCtx.setUserDetails(data.resetPassword.user);
             authCtx.setAuthState(data.resetPassword.jwt);
+
+            eventTrack("authentication","forgot_password_success","Forgot Password Success")
             router.push('/');
         }
     }, [data]);
@@ -36,31 +46,6 @@ const ResetPassword = () => {
       confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required')
   });
 
-    // async function handleSubmitForm(event) {
-    //     event.preventDefault();
-
-    //     if (password !== confirmPassword) {
-    //         console.log('Passwords should be same');
-    //         return;
-    //     }
-
-    //     if (password !== '' && confirmPassword !== '' && code !== '') {
-    //         const variables = {
-    //             code: code,
-    //             password: password,
-    //             passwordConfirmation: confirmPassword
-    //         };
-    //         resetPass({ variables });
-
-    //         setCode('');
-    //         setPassword('');
-    //         setConfirmPassword('');
-    //         console.log('Fields not empty');
-    //     } else {
-    //         console.log('Fields should not be empty');
-    //         return;
-    //     }
-    // }
 
     return (
         <Box bgImage="url('/images/login_banner.jpg')" bgPosition={['', 'center']} bgRepeat="no-repeat" bgSize="cover">
