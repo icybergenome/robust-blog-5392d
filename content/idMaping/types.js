@@ -1,6 +1,6 @@
 export const data = [
     {
-        id: '1',
+        id: 1,
         name: '/',
         fields: `... on ComponentSectionsHome{
             more_link_text,
@@ -32,17 +32,45 @@ export const data = [
         }`
     },
     {
-        id: 4,
-        name: 'style-guide',
-        fields: `... on ComponentSectionsStyleGuide{
-            marked_content
-        }`
+        id: 5,
+        name: 'newPost'
     },
     {
-        id: 5,
-        name: 'success',
-        fields: `... on ComponentSectionsSuccess{
-            marked_content
-        }`
-    }
+        id: 6,
+        name: 'register'
+    },
+    {
+        id: 7,
+        name: 'login'
+    },
+    {
+        id: 8,
+        name: 'forgotPassword'
+    },
+    {
+        id: 9,
+        name: 'resetPassword'
+    },
+    // {
+    //     id: 4,
+    //     name: 'style-guide',
+    //     fields: `... on ComponentSectionsStyleGuide{
+    //         marked_content
+    //     }`
+    // },
+    // {
+    //     id: 5,
+    //     name: 'success',
+    //     fields: `... on ComponentSectionsSuccess{
+    //         marked_content
+    //     }`
+    // },
+    // {
+    //     id: 6,
+    //     name: 'login',
+    //     fields: `... on ComponentSectionsHome{
+    //         more_link_text,
+    //         has_more_link
+    //     }`
+    // }
 ];
