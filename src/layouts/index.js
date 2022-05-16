@@ -8,16 +8,16 @@ import login from './login'
 import forgotPassword from './forgotPassword'
 import resetPassword from './resetPassword';
 
-export { contact, home, page, post, newPost, register, login, forgotPassword, resetPassword };
+export { contact, home, page, post, register, login, forgotPassword, resetPassword, newPost };
 
 export default {
     contact,
     home,
     page,
     post,
-    newPost,
     register,
     login,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    newPost
 };
