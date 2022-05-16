@@ -6,44 +6,62 @@ import { ApolloProvider } from '@apollo/client';
 import { GET_POSTS } from '../utils/graphql/mutation/post';
 import { ChakraProvider,ColorModeScript,ColorModeProvider,CSSReset } from '@chakra-ui/react'; 
 // import { MarkdownFieldPlugin } from "react-tinacms-editor";
-import { withTina } from "tinacms";
+import { withTina,TinaProvider, TinaCMS, useCMS } from "tinacms";
 import { HtmlFieldPlugin, MarkdownFieldPlugin } from "react-tinacms-editor"
 import { AuthProvider } from '../utils/context/auth-context';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useEffect } from 'react';
-
-
 import ReactGA from "react-ga4";
+// import { GitClient, GitMediaStore } from '@tinacms/git-client'
 
- function MyApp({ Component, pageProps }) {
+import TinaMediaStore from '../utils/tina/store';
 
-    useEffect(() => {
+
+function MyApp({ Component, pageProps }) {
+
+    const cms = useCMS()
+    const { slug } = pageProps 
+    console.log("SLUG",slug)
+
+    useEffect(()=>{
+      
+      if((slug === 'newPost' || slug === 'editPost')){
+        cms.enable()
+       }else{
+        document.body.style.paddingLeft = '0'
+        cms.disable()
+       }
+      
         
-        ReactGA.initialize(process.env.NEXT_PUBLIC_G);
-        ReactGA.send(window.location.pathname + window.location.search);
-         
-      }, []);
+    }, [slug])
+
 
     return (
-        <AuthProvider>
-            <ApolloProvider client={client}>
-                <ChakraProvider>
-                    <ColorModeScript initialColorMode="light" />
-                    <ColorModeProvider options={{
-                        useSystsemColorMode: true
-                    }}>
-                        <CSSReset />
-                    </ColorModeProvider>
-                    { 
-                        pageProps.protected ? <ProtectedRoute componentProps={pageProps} element={Component}/> : <Component {...pageProps} />
-                    }
-                </ChakraProvider>
-            </ApolloProvider>
-        </AuthProvider>
+            <AuthProvider>
+                <ApolloProvider client={client}>
+                    <ChakraProvider>
+                        <ColorModeScript initialColorMode="light" />
+                        <ColorModeProvider options={{
+                            useSystsemColorMode: true
+                        }}>
+                            <CSSReset />
+                        </ColorModeProvider>
+                        {/* <TinaProvider cms={cms}> */}
+                        { 
+                            pageProps.protected ? <ProtectedRoute componentProps={pageProps} element={Component}/> : <Component {...pageProps} />
+                        }
+                        {/* </TinaProvider> */}
+                    </ChakraProvider>
+                </ApolloProvider>
+            </AuthProvider>
     )
 }
+
+// export default MyApp;
+
 export default withTina(MyApp, {
+    media: new TinaMediaStore(),
     plugins: [MarkdownFieldPlugin],
     enabled: true,
-    sidebar: true,
+    sidebar: true
   })
