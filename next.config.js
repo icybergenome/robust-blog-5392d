@@ -12,7 +12,6 @@ const moduleExports = {
         autoPrerender: false
     },
     env: {
-        AUTH_TOKEN_C: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ5MzYwODYyLCJleHAiOjE2NTE5NTI4NjJ9.DU3ax_8mGbJ7uhUDZPAym7TDs6330g4mcx3JlU0qhoc',
         graphqlEndPoint:'http://localhost:1337'
       },
     webpack: (config, { webpack, isServer }) => {
