@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { sourcebitDataClient } from 'sourcebit-target-next';
 import { withRemoteDataUpdates } from 'sourcebit-target-next/with-remote-data-updates';
@@ -7,16 +7,15 @@ import { GET_POSTS } from '../utils/graphql/queries/getPosts';
 import { GET_CATEGORIES } from '../utils/graphql/queries/getCategories';
 import { GET_PAGE } from '../utils/graphql/queries/getPage';
 import { GET_HEADER } from '../utils/graphql/queries/getHeader';
-
+import { CMSContext, useCMS } from 'tinacms';
 import pageLayouts from '../layouts';
-
 import { client } from '../utils/apollo/apollo';
-
+import Body from '../components/Layout';
 
 const Page = (props) => {
 
-    const modelName = _.get(props.page, 'page.model_name');
 
+    const modelName = _.get(props.page, 'page.model_name');
     const PageLayout = pageLayouts[modelName];
     if (!PageLayout) {
         throw new Error(`no page layout matching the page model: ${modelName}`);
