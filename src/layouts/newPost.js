@@ -12,17 +12,32 @@ import Footer from '../components/Footer';
 import { htmlToReact, markdownify, withPrefix } from '../utils';
 import { getStrapiMedia } from '../utils/strapiMedia';
 import { Cache, useMutation,useQuery } from '@apollo/client';
-import { useForm, usePlugin,useCMS } from 'tinacms'
+
+import { useForm, usePlugin, useCMS, withTina, TinaProvider, TinaCMS } from 'tinacms'
+import { HtmlFieldPlugin, MarkdownFieldPlugin } from "react-tinacms-editor"
 import { CREATE_POST } from '../utils/graphql/mutation/post';
 import { GET_POSTS } from '../utils/graphql/queries/getPosts';
 import ReactGA from "react-ga4";
+
+// import { withTina,TinaProvider, TinaCMS, useCMS } from "tinacms";
+import TinaMediaStore from '../utils/tina/store';
 
 import { useRouter } from 'next/router';
 import { AuthContext } from '../utils/context/auth-context';
 
 const NewPost = (props) => {
-    const cms = useCMS();
+    // const cms = useCMS();
+    // console.log("New POST",cms)
     const router = useRouter();
+
+
+    // useEffect(() => {
+      
+    //   return ()=>document.body.style.paddingLeft = "0px"
+    // },[])
+    
+
+
     const eventTrack = (category, action, label) => {
         ReactGA.event({
           category: category,
@@ -30,7 +45,11 @@ const NewPost = (props) => {
           label: label,
         })
       }
-
+      const categories = _.get(props, 'categories');
+      const category = categories.categories.map((cat) => {
+        return {value: cat.category_key, label: cat.category_name}
+      })
+      // console.log("My Cat",category)
 
     const [createPost, { loading,data,error }] = useMutation(CREATE_POST,
         {
@@ -87,6 +106,7 @@ const NewPost = (props) => {
         useEffect(()=>{
             
             if(data){
+              console.log("DATA",data)
                 cms.alerts.success('Post Added Successfully');
     
                 eventTrack("post","post_publish","Post Published")
@@ -98,40 +118,19 @@ const NewPost = (props) => {
             }
         },[data,error])
 
-    // let category = [{value:'',label:''}]
-    // if(categories){
-    //     category = categories.categories.map((item) => {
-    //             return {
-    //             value: item.category_key,
-    //             label: item.category_name,
-    //             }
-    //         })
-    // }
-
-    // console.log("myy categoriess",category)
-
-    // useEffect(()=> {
-    //     console.log("data in",data)
-    // },[])
-
-
     const [pagee, form] = useForm(
         {
           initialValues: "newPost",
           label: "Add New Post",
           fields: [
-            {
+              {
                 label: 'Hero Image',
-                name: 'frontmatter.hero_image',
+                name: 'postData.heroImg',
                 component: 'image',
-                // Generate the frontmatter value based on the filename
-                parse: media => `/static/${media.filename}`,
-      
-                // Decide the file upload directory for the post
-                uploadDir: () => '/public/static/',
-      
-                // Generate the src attribute for the preview image.
-                previewSrc: fullSrc => fullSrc.replace('/public', ''),
+                uploadDir: () => "/public",
+                parse: ({ previewSrc }) => previewSrc,
+                previewSrc: (src) => src,
+                
               },
               {
                 name: "postData.title",
@@ -143,53 +142,58 @@ const NewPost = (props) => {
                 label: "Post Subtitle",
                 component: "text",
               },
-            //   {
-            //     name: "postData.category",
-            //     label: "Category",
-            //     component: "select",
-            //     defaultValue: "",
-            //     options: [
-            //       { value: "notSpecified", label: "N/A" },
-            //       ...category
-            //     ],
-            //   },
+              {
+                name: "postData.category",
+                label: "Category",
+                component: "select",
+                defaultValue: "",
+                options: [
+                  { value: "notSpecified", label: "N/A" },
+                  ...category
+                ],
+              },
               {
                 name: "postData.slug",
                 label: "Post Slug",
                 component: "text",
               },
               {
+                name: "postData.description",
+                label: "Post Description",
+                component: "markdown",
+              },
+            //   {
                 
-                name: 'postData.blocks',
-                component: 'blocks',
-                description: 'Content of blocks',
-                label: 'Add New Blocks',
-                templates: {
-                    'body-content-block': {
-                        label: 'Body Content',
-                        key: 'bodyContent',
-                        defaultItem: {
-                            content: ''
-                        },
-                        fields: [{ name: 'content', label: 'Body Content', component: 'markdown' }]
-                    },
-                    'image-block': {
-                        label: 'Image',
-                        key: 'image-content-block',
-                        fields: [
-                            {
-                                label: 'Image',
-                                name: 'image',
-                                component: 'image',
-                                uploadDir: () => '/public',
-                                parse: ({ previewSrc }) => previewSrc,
-                                previewSrc: (src) => src
-                            },
-                            { name: 'imageCaption', label: 'Image Caption', component: 'text' }
-                        ]
-                    },
-                }
-            },
+            //     name: 'postData.blocks',
+            //     component: 'blocks',
+            //     description: 'Content of blocks',
+            //     label: 'Add New Blocks',
+            //     templates: {
+            //         'body-content-block': {
+            //             label: 'Body Content',
+            //             key: 'bodyContent',
+            //             defaultItem: {
+            //                 content: ''
+            //             },
+            //             fields: [{ name: 'content', label: 'Body Content', component: 'markdown' }]
+            //         },
+            //         'image-block': {
+            //             label: 'Image',
+            //             key: 'image-content-block',
+            //             fields: [
+            //                 {
+            //                     label: 'Image',
+            //                     name: 'image',
+            //                     component: 'image',
+            //                     uploadDir: () => '/public',
+            //                     parse: ({ previewSrc }) => previewSrc,
+            //                     previewSrc: (src) => src
+            //                 },
+            //                 { name: 'imageCaption', label: 'Image Caption', component: 'text' }
+            //             ]
+            //         },
+            //     }
+            // },
         ],
         onSubmit: async (values) => {
             const dataa = {
@@ -197,31 +201,30 @@ const NewPost = (props) => {
               }
               const date = new Date();
               dataa.date = date.toISOString().split('T')[0];
-               const ComponentBasicDescription = dataa.postData.blocks.map((item) => {
-                if(item._template === 'body-content-block'){
-                  return item.content;
-                }
-              })
+               const ComponentBasicDescription = dataa.postData.description
       
-              const ComponentBasicImage = dataa.postData.blocks.map((item) => {
-                if(item._template === 'body-image-block'){
-                  return item;
-                }
-              })
+            //   const ComponentBasicImage = dataa.postData.blocks.map((item) => {
+            //     if(item._template === 'body-image-block'){
+            //       return item;
+            //     }
+            //   })
+            var f2 = new File([""], "Image", {type:'file/jpg',url: dataa.postData.heroImg});
+            console.log("newFile",f2)
             const variables = {
             input: {
                 data:{
                   date:dataa.date,
                   title:dataa.postData.title,
                   subtitle:dataa.postData.subtitle,
-                //   category: dataa.postData.category,
+                  category: dataa.postData.category,
+                  post_img_url:dataa.postData.heroImg,
                   slug: dataa.postData.slug,
-                  postDetail: [{__typename: "ComponentBasicDescription", description: ComponentBasicDescription[0]}]
+                  postDetail: [{__typename: "ComponentBasicDescription", description: ComponentBasicDescription}]
                 } 
               },
             };
             
-            createPost({ variables})
+            createPost({variables})
             
             
           
@@ -229,8 +232,7 @@ const NewPost = (props) => {
       }
     )
       usePlugin(form)
-      
-      const post = pagee
+        const post = pagee
         const date = new Date();
         const dateTimeAttr = moment(date).strftime('%Y-%m-%d %H:%M');
         const formattedDate = moment(date).strftime('%B %d, %Y');
@@ -239,7 +241,7 @@ const NewPost = (props) => {
         const page = _.get(props, 'page');
         return (
             <Layout page={page} config={config}>
-                <Header config={config} page='newPost' image={props.headerImg} />
+                <Header config={config} page='newPost' image={post.postData && post.postData.heroImg} />
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
                         <article className="post post-full">
@@ -255,37 +257,11 @@ const NewPost = (props) => {
                             </header>
                             {post.postData && <div className="post-subtitle">{post.postData.subtitle}</div>}
                             <img className="thumbnail" src='' alt='' />
-                            {post.postData &&  post.postData.blocks &&
-                                post.postData.blocks.map((item,index) => {
-                                    switch (item._template) {
-                                        case 'body-content-block':
-                                            return (
-                                                <div key={index} style={{ marginTop: '2rem' }} className="post-content">
-                                                    {markdownify(item.content)}
-                                                </div>
-                                            );
-                                        case 'image-block':
-                                            return (
-                                                
-                                                <img
-                                                    key={index}
-                                                    style={{ marginTop: '2rem' }}
-                                                    className="thumbnail"
-                                                    src={withPrefix(getStrapiMedia(item.image))}
-                                            />
-                                            );
-
-                                        // case 'ComponentBasicVideo':
-                                        //     return (
-                                        //         <video style={{ width: '100%', height: '400px' }} controls>
-                                        //             <source src={getStrapiMedia(video)}></source>
-                                        //         </video>
-                                        //     );
-                                        // case 'ComponentBasicVideoWithUrl':
-                                        //     return <iframe style={{ width: '100%', height: '400px' }} src={url}></iframe>;
-                                        default:
-                                    }
-                                })}
+                            {post.postData &&  post.postData.description && (
+                                    <div style={{ marginTop: '2rem' }} className="post-content">
+                                        {markdownify(post.postData.description)}
+                                    </div>
+                                )}
                         </article>
                     </main>
                     <Footer config={config} />
@@ -296,3 +272,10 @@ const NewPost = (props) => {
 }
 
 export default NewPost;
+
+// export default withTina(NewPost, {
+//   media: new TinaMediaStore(),
+//   plugins: [MarkdownFieldPlugin],
+//   enabled: true,
+//   sidebar: true
+// })
