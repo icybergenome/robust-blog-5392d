@@ -4,7 +4,6 @@ export const isValid = (jwt) => {
 
         const decoded = jwt_decode(jwt);
         const date = Date.now()
-        console.log("isVaer",decoded)
         if (date >= decoded.exp * 1000) {
             return {
                 valid : false,
