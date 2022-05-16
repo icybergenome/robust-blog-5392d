@@ -11,6 +11,48 @@ export const CREATE_POST = gql`
             slug
             published_at
             date
+            post_img_url
+            postDetail {
+                __typename
+                ... on ComponentBasicImage {
+                    image {
+                        url
+                        alternativeText
+                        caption
+                    }
+                }
+                __typename
+                ... on ComponentBasicDescription {
+                    description
+                }
+                __typename
+                ... on ComponentBasicVideo {
+                    video {
+                        url
+                        caption
+                        alternativeText
+                    }
+                }
+                __typename
+                ... on ComponentBasicVideoWithUrl {
+                    url
+                }
+            }
+        }
+    }
+  }
+  `;
+
+export const UPDATE_POST = gql`
+    mutation updatePost($input: updatePostInput) {
+      updatePost(input: $input) {
+        post {
+            id
+            title
+            subtitle
+            slug
+            published_at
+            date
             
             postDetail {
                 __typename
@@ -116,6 +158,15 @@ export const RESET_PASSWORD = gql`
             name
             }
         }
+        }
+    }
+  `;
+
+
+  export const UPLOAD_FILE = gql`
+    mutation upload($file: Upload!) {
+        upload(file: $file) {
+            name
         }
     }
   `;
