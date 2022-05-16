@@ -8,9 +8,6 @@ query page($id: ID!) {
         updated_at
         title
         subtitle
-        img_path {
-            url
-        }
         layout
         model_name
         seo {
