@@ -8,7 +8,7 @@ query posts {
         title
         subtitle
         date
-        
+        post_img_url
         slug
         published_at
         postDetail {
