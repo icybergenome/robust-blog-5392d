@@ -11,11 +11,7 @@ export const getPosts = async () => {
                 title
                 subtitle
                 date
-                cover_img {
-                    url
-                    alternativeText
-                    caption
-                }
+                post_img_url
                 hide_header
                 seo {
                     id
