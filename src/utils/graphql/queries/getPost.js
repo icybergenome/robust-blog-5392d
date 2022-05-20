@@ -10,6 +10,7 @@ query post($id: ID!) {
         date
         post_img_url
         slug
+        category
         post_created_by
         post_updated_by
         published_at
