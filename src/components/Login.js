@@ -77,6 +77,9 @@ const validate = Yup.object({
       bgPosition={["","center"]}
       bgRepeat="no-repeat"
       bgSize="cover"
+      position="fixed" 
+      width="100%" 
+      height="100%"
     >
         <Box d="flex" justifyContent={["center","end"]} alignItems="center" minW={{ base: "90%", md: "539px" }} mr={["0","118px"]}>
           <Formik
@@ -98,10 +101,10 @@ const validate = Yup.object({
           >
           <Form>
             <Stack
-              mt="80px"
-              mb="80px"
+              mt="40px"
+              mb="40px"
               width={["390px","510px"]}
-              height="641px"
+              height="600px"
               spacing={4}
               px="44px"
               pt="30px"
@@ -117,8 +120,8 @@ const validate = Yup.object({
                 <Box>
                   <Text
                     fontWeight="400"
-                    fontSize="21px"
-                    lineHeight="32px"
+                    fontSize="15px"
+                    lineHeight="15px"
                   >
                     Welcome to <chakra.span color="#779341" fontWeight="600" lineHeight="32px" fontSize="21px">LOREM</chakra.span>
                   </Text>
@@ -133,11 +136,11 @@ const validate = Yup.object({
                 </Box>
               </Flex>
               <Text
-                lineHeight="82px"
-                fontSize="55px"
+                lineHeight="30px"
+                fontSize="50px"
                 fontWeight="500"
-                mt="0"
-                mb="40px"
+                mt="4px"
+                mb="35px !important"
               >
                 Sign In
               </Text>
