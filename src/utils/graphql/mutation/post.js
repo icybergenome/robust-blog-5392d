@@ -12,6 +12,8 @@ export const CREATE_POST = gql`
             published_at
             date
             post_img_url
+            post_created_by
+            post_updated_by
             postDetail {
                 __typename
                 ... on ComponentBasicImage {
