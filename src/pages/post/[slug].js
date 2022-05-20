@@ -14,20 +14,24 @@ import Footer from '../../components/Footer';
 import { htmlToReact, markdownify, withPrefix } from '../../utils';
 import { getStrapiMedia } from '../../utils/strapiMedia';
 
+import { useEffect,useContext } from 'react';
 import Link from 'next/link'
 
-class Post extends React.Component {
-    render() {
-        const slug = this.props.router.query.slug;
-        const posts = _.get(this.props, 'posts.posts');
+import { AuthContext } from '../../utils/context/auth-context';
 
+const Post = (props) => {
+    const ctx = useContext(AuthContext)
+ 
+
+        const slug = props.router.query.slug;
+        const posts = _.get(props, 'posts.posts');
         const post = _.find(posts, function (d) {
             return d.slug === slug;
         });
-        const data = _.get(this.props, 'data');
+        const data = _.get(props, 'data');
         const config = _.get(data, 'config');
-        const header = _.get(this.props, 'header.header');
-        const categories = _.get(this.props, 'categories.categories');
+        const header = _.get(props, 'header.header');
+        const categories = _.get(props, 'categories.categories');
         const title = _.get(post, 'title');
         const subtitle = _.get(post, 'subtitle');
         const cover_img_url = _.get(post, 'post_img_url');
@@ -42,16 +46,17 @@ class Post extends React.Component {
         const category = _.find(categories, function (d) {
             return d.category_key === post.category;
         });
-        console.log("MY PROPS",post)
         return (
             <>
-                <Header config={config} page={this.props} image={cover_img_url ? cover_img_url : '/images/no-image.jpg'} />
+                <Header config={config} page={props} image={cover_img_url ? cover_img_url : '/images/no-image.jpg'} />
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
                         <article className="post post-full">
-                        <Link href={`../../../editPost/${post.id}`}>
-                            Edit
-                        </Link>
+                        {ctx.userInfo.id === post.post_created_by && (
+                            <Link href={`../../../editPost/${post.id}`}>
+                                Edit
+                            </Link>
+                        )}
                             <header className="post-header">
                                 <h1 className="post-title">{title}</h1>
                                 <div style={{ backgroundColor: category ? category.category_color : '' }} className="cagtegory_tag">
@@ -105,7 +110,7 @@ class Post extends React.Component {
                 </div>
             </>
         );
-    }
+    
 }
 
 export const getServerSideProps = async (context) => {
