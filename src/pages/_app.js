@@ -11,18 +11,15 @@ import { HtmlFieldPlugin, MarkdownFieldPlugin } from "react-tinacms-editor"
 import { AuthProvider } from '../utils/context/auth-context';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useEffect } from 'react';
-import ReactGA from "react-ga4";
-// import { GitClient, GitMediaStore } from '@tinacms/git-client'
 
 import TinaMediaStore from '../utils/tina/store';
-
+import { Userdetails } from '../utils/getUser';
 
 function MyApp({ Component, pageProps }) {
 
     const cms = useCMS()
     const { slug } = pageProps 
-    console.log("SLUG",slug)
-
+    let currentUser = {}
     useEffect(()=>{
       
       if((slug === 'newPost' || slug === 'editPost')){
@@ -31,7 +28,7 @@ function MyApp({ Component, pageProps }) {
         document.body.style.paddingLeft = '0'
         cms.disable()
        }
-      
+       currentUser = Userdetails()
         
     }, [slug])
 
@@ -46,11 +43,9 @@ function MyApp({ Component, pageProps }) {
                         }}>
                             <CSSReset />
                         </ColorModeProvider>
-                        {/* <TinaProvider cms={cms}> */}
                         { 
-                            pageProps.protected ? <ProtectedRoute componentProps={pageProps} element={Component}/> : <Component {...pageProps} />
+                            pageProps.protected ? <ProtectedRoute currentUser componentProps={pageProps} element={Component}/> : <Component {...pageProps} />
                         }
-                        {/* </TinaProvider> */}
                     </ChakraProvider>
                 </ApolloProvider>
             </AuthProvider>
