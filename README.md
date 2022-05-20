@@ -76,7 +76,14 @@ If you need a hand, make sure to check the [Stackbit support page](https://stack
 1. Install dependencies
 
        run npm install
-       
+
+1.  Configure/Create pages from backend
+
+1.  Go to `content/idMapping/types.js` and assign `name` and `id` to page. `id` can be read from backend pages section and `name` is slug of page.
+
+1.  layout folder include layouts of pages configured in backend. frontend pages layout should be same as backend pages layout
+    
+
 1. Start the Next.js local development server:
 
         npm run develop
