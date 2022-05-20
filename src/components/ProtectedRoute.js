@@ -16,41 +16,42 @@ import _ from 'lodash';
 import { css } from "@emotion/react";
 
 import LoadingSpinner from './LoadingSpinner';
-
+import { Userdetails, userAuth } from '../utils/getUser';
 
 export default function ProtectedRoute(props) {
 
 
   
     const [isLoading, setIsLoading] = useState(false) 
-    const [error, setIsError] = useState(false) 
-
+  
     const router = useRouter()
-    const authContext = useContext(AuthContext);
-    const auth = authContext.isUserAuthenticated();
-
     const Component = props.element
-
+    
     useEffect(() => {
+      setIsLoading(true)
       router.events.on('routeChangeStart', () => setIsLoading(true));
       router.events.on('routeChangeComplete', () => setIsLoading(false));
-
-      // const token = localStorage.getItem("jwtToken")
-    
+      const user = userAuth()
       
-      if(auth && (props.componentProps.slug === 'login' || props.componentProps.slug === 'register')){
-        console.log("In Home")
-        router.push('/')
-        return
-      } 
-
-      if(!auth && (props.componentProps.slug !== 'login' && props.componentProps.slug !== 'register')){
-        console.log("In login")
-        router.push('/login')
-        return
+      if(user){
+        setIsLoading(false)
+        console.log(user)
+        if(user.valid && (props.componentProps.slug === 'login' || props.componentProps.slug === 'register')){
+          console.log("In Home")
+          router.push('/')
+          return null
+        } 
+  
+        if(!user.valid && (props.componentProps.slug !== 'login' && props.componentProps.slug !== 'register')){
+          console.log("In login")
+          router.push('/login')
+          return null
+        }
       }
+      
+      
 
-    }, [auth,router])
+    }, [Userdetails,router])
     
 
    return (
