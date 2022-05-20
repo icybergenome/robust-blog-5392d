@@ -8,8 +8,7 @@ const { Provider } = AuthContext;
 
 const AuthProvider = ({ children }) => {
     const [authState, setAuthState] = useState("");
-    const [userInfo, setUserInfo] = useState({}) 
-    const [authError, setAuthError] = useState([]) 
+    const [userInfo, setUserInfo] = useState({})
 
 
     const getUser = () => {
@@ -17,7 +16,6 @@ const AuthProvider = ({ children }) => {
         const userInfo = localStorage.getItem("userInfo")
         setAuthState(jwtToken);
         setUserInfo(JSON.parse(userInfo));
-        console.log("auth state",authState)
     }
 
     useEffect(() => {
@@ -26,7 +24,6 @@ const AuthProvider = ({ children }) => {
 
     const setUserAuthInfo = (token) => {
      const jwtToken = localStorage.setItem("jwtToken", token);
-  
      setAuthState(jwtToken);
     };
 
@@ -50,11 +47,29 @@ const AuthProvider = ({ children }) => {
         const authToken  = localStorage.getItem("jwtToken")
         const valid = isValid(authToken)
         if(valid.valid && valid.user_id == userInfo.id){
-          return true  
+          return true
         }else{
           // setAuthError([{title: "Forbidden", message: "You cannot access or make request"}])
           console.log("Invalid user token")
           return false
+        }
+        
+    }
+   };
+
+   const isUser = (user_id) => {
+     
+    
+    if (!authState) {
+        return false;
+    }else{
+        const authToken  = localStorage.getItem("jwtToken")
+        const valid = isValid(authToken)
+        if(valid.valid && valid.user_id == userInfo.user_id){
+          return {message: "User Verified", status: 1}
+        }else{
+          // setAuthError([{title: "Forbidden", message: "You cannot access or make request"}])
+          return {message: "User Unverified", status: 0}
         }
         
     }
@@ -69,6 +84,7 @@ const AuthProvider = ({ children }) => {
         setAuthState: (userAuthInfo) => setUserAuthInfo(userAuthInfo),
         setUserDetails: (userDetails) => setUserDetails(userDetails),
         isUserAuthenticated,
+        isUser
       }}
      >
       {children}
@@ -76,12 +92,12 @@ const AuthProvider = ({ children }) => {
    );
   };
 
-  export const ProtectRoute = ({ children }) => {
-    const { isUserAuthenticated, isLoading } = useAuth();
-    if (isLoading || (!isAuthenticated && window.location.pathname !== '/login')){
-      return <LoadingScreen />; 
-    }
-    return children;
-  };
+  // export const ProtectRoute = ({ children }) => {
+  //   const { isUserAuthenticated, isLoading } = useAuth();
+  //   if (isLoading || (!isAuthenticated && window.location.pathname !== '/login')){
+  //     return <LoadingScreen />; 
+  //   }
+  //   return children;
+  // };
   
   export { AuthContext, AuthProvider };
