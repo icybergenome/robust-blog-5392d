@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import _ from 'lodash';
 import moment from 'moment-strftime';
 import withPageCMS from "../utils/withPageCMS";
@@ -19,24 +19,18 @@ import { CREATE_POST } from '../utils/graphql/mutation/post';
 import { GET_POSTS } from '../utils/graphql/queries/getPosts';
 import ReactGA from "react-ga4";
 
-// import { withTina,TinaProvider, TinaCMS, useCMS } from "tinacms";
+
 import TinaMediaStore from '../utils/tina/store';
 
 import { useRouter } from 'next/router';
 import { AuthContext } from '../utils/context/auth-context';
 
 const NewPost = (props) => {
-    // const cms = useCMS();
-    // console.log("New POST",cms)
+    const cms = useCMS();
+    // const [userData, setUserData] = useState({})
     const router = useRouter();
 
-
-    // useEffect(() => {
-      
-    //   return ()=>document.body.style.paddingLeft = "0px"
-    // },[])
-    
-
+    const ctx = useContext(AuthContext)
 
     const eventTrack = (category, action, label) => {
         ReactGA.event({
@@ -68,6 +62,9 @@ const NewPost = (props) => {
                         date: postedData.post.date,
                         postDetail:postedData.post.postDetail,
                         published_at:postedData.post.published_at,
+                        post_img_url:postedData.post.post_img_url,
+                        post_created_by: ctx.userInfo.id ? ctx.userInfo.id : '',
+                        post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                         slug:postedData.post.slug,
                     }
                     
@@ -88,6 +85,9 @@ const NewPost = (props) => {
                         date: postedData.post.date,
                         postDetail:postedData.post.postDetail,
                         published_at:postedData.post.published_at,
+                        post_img_url:postedData.post.post_img_url,
+                        post_created_by: ctx.userInfo.id ? ctx.userInfo.id : '',
+                        post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                         slug:postedData.post.slug,
                     }
                     const posts = {posts:objPost}
@@ -124,8 +124,8 @@ const NewPost = (props) => {
           label: "Add New Post",
           fields: [
               {
-                label: 'Hero Image',
-                name: 'postData.heroImg',
+                label: 'Cover Image',
+                name: 'postData.post_img_url',
                 component: 'image',
                 uploadDir: () => "/public",
                 parse: ({ previewSrc }) => previewSrc,
@@ -208,8 +208,7 @@ const NewPost = (props) => {
             //       return item;
             //     }
             //   })
-            var f2 = new File([""], "Image", {type:'file/jpg',url: dataa.postData.heroImg});
-            console.log("newFile",f2)
+
             const variables = {
             input: {
                 data:{
@@ -217,16 +216,18 @@ const NewPost = (props) => {
                   title:dataa.postData.title,
                   subtitle:dataa.postData.subtitle,
                   category: dataa.postData.category,
-                  post_img_url:dataa.postData.heroImg,
+                  post_img_url:dataa.postData.post_img_url,
+                  post_created_by: ctx.userInfo.id ? ctx.userInfo.id : '',
+                  post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                   slug: dataa.postData.slug,
                   postDetail: [{__typename: "ComponentBasicDescription", description: ComponentBasicDescription}]
-                } 
+                }
               },
             };
+
+            console.log("My Variables",variables)
             
             createPost({variables})
-            
-            
           
         }
       }
@@ -241,7 +242,7 @@ const NewPost = (props) => {
         const page = _.get(props, 'page');
         return (
             <Layout page={page} config={config}>
-                <Header config={config} page='newPost' image={post.postData && post.postData.heroImg} />
+                <Header config={config} page='newPost' image={post.postData && post.postData.post_img_url} />
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
                         <article className="post post-full">
@@ -271,11 +272,7 @@ const NewPost = (props) => {
     
 }
 
+
+
 export default NewPost;
 
-// export default withTina(NewPost, {
-//   media: new TinaMediaStore(),
-//   plugins: [MarkdownFieldPlugin],
-//   enabled: true,
-//   sidebar: true
-// })
