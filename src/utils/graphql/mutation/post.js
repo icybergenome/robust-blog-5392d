@@ -54,8 +54,10 @@ export const UPDATE_POST = gql`
             subtitle
             slug
             published_at
+            post_img_url
             date
-            
+            category
+            post_updated_by
             postDetail {
                 __typename
                 ... on ComponentBasicImage {
