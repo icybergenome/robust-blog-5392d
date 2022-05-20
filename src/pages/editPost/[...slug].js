@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import _ from 'lodash';
 import moment from 'moment-strftime';
 import { useRouter } from 'next/router';
@@ -11,22 +11,36 @@ import { getStrapiMedia } from '../../utils/strapiMedia';
 import { UPDATE_POST } from '../../utils/graphql/mutation/post';
 import { GET_POSTS } from '../../utils/graphql/queries/getPosts';
 import { GET_POST } from '../../utils/graphql/queries/getPost';
+import { GET_CATEGORIES } from '../../utils/graphql/queries/getCategories';
 import { useForm, usePlugin, useCMS, withTina, TinaProvider, TinaCMS } from 'tinacms'
 import { client } from '../../utils/apollo/apollo';
+import { AuthContext } from '../../utils/context/auth-context';
 
 import Link from 'next/link'
 import { Link as ChakraLink } from "@chakra-ui/react";
 
 import { Cache, useMutation,useQuery } from '@apollo/client';
 import ReactGA from "react-ga4";
-
+import { userAuth } from '../../utils/getUser';
 
 const EditPost = (props) => {
         const cms = useCMS();
         const router = useRouter()
-
+        const ctx = useContext(AuthContext)
+        
         const post_detail = _.get(props, 'post_detail');
-        console.log(post_detail)
+        // const postCreatedBy = Number(post_detail.post.post_created_by)
+        // useEffect(()=> {
+        //     const user = userAuth()
+        //     if(user.valid){
+        //         if(postCreatedBy != user.user_id){
+        //             router.push('/404')
+        //         }
+        //     }
+        // }, [])  
+
+        
+        
         const eventTrack = (category, action, label) => {
             ReactGA.event({
               category: category,
@@ -34,6 +48,10 @@ const EditPost = (props) => {
               label: label,
             })
         }
+        const categories = _.get(props, 'categories');
+        const category = categories.categories.map((cat) => {
+            return {value: cat.category_key, label: cat.category_name}
+          })
 
 
         const [updatePost, { loading,data,error }] = useMutation(UPDATE_POST,
@@ -50,7 +68,10 @@ const EditPost = (props) => {
                             id:postedData.post.id,
                             title: postedData.post.title,
                             subtitle:postedData.post.subtitle,
+                            category:postedData.post.category,
                             date: postedData.post.date,
+                            post_img_url: postedData.post.post_img_url,
+                            post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                             postDetail:postedData.post.postDetail,
                             published_at:postedData.post.published_at,
                             slug:postedData.post.slug,
@@ -70,7 +91,10 @@ const EditPost = (props) => {
                             id:postedData.post.id,
                             title: postedData.post.title,
                             subtitle:postedData.post.subtitle,
+                            category:postedData.post.category,
                             date: postedData.post.date,
+                            post_img_url: postedData.post.post_img_url,
+                            post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                             postDetail:postedData.post.postDetail,
                             published_at:postedData.post.published_at,
                             slug:postedData.post.slug,
@@ -104,12 +128,12 @@ const EditPost = (props) => {
 
             const [pagee, form] = useForm(
                 {
-                  initialValues: "updatePost",
+                  initialValues: "postUpdate",
                   label: "Update Post",
                   fields: [
                     {
-                        label: 'Hero Image',
-                        name: 'frontmatter.hero_image',
+                        label: 'Cover Image',
+                        name: 'postData.post_img_url',
                         component: 'image',
                         // Generate the frontmatter value based on the filename
                         parse: media => `/static/${media.filename}`,
@@ -133,16 +157,16 @@ const EditPost = (props) => {
                         component: "text",
                         defaultValue: post_detail.post.subtitle
                       },
-                    //   {
-                    //     name: "postData.category",
-                    //     label: "Category",
-                    //     component: "select",
-                    //     defaultValue: "",
-                    //     options: [
-                    //       { value: "notSpecified", label: "N/A" },
-                    //       ...category
-                    //     ],
-                    //   },
+                      {
+                        name: "postData.category",
+                        label: "Category",
+                        component: "select",
+                        defaultValue: post_detail.post.category,
+                        options: [
+                          { value: "notSpecified", label: "N/A" },
+                            ...category
+                        ],
+                      },
                       {
                         name: "postData.slug",
                         label: "Post Slug",
@@ -177,6 +201,7 @@ const EditPost = (props) => {
                     const dataa = {
                         ...values
                       }
+                      console.log("here 1")
                       const date = new Date();
                       dataa.date = date.toISOString().split('T')[0];
                     //    const ComponentBasicDescription = dataa.postData.blocks.map((item) => {
@@ -199,14 +224,16 @@ const EditPost = (props) => {
                           
                           date:dataa.date,
                           title:dataa.postData.title,
+                          post_img_url: dataa.postData.post_img_url,
+                          post_updated_by: ctx.userInfo.id ? ctx.userInfo.id : '',
                           subtitle:dataa.postData.subtitle,
-                        //   category: dataa.postData.category,
+                          category: dataa.postData.category,
                           slug: dataa.postData.slug,
                           postDetail: [{__typename: "ComponentBasicDescription", description: dataa.postData.description}]
                         } 
                       },
                     };
-                    
+                    console.log("Variabeles",variables)
                     updatePost({ variables})
                 }
               }
@@ -221,11 +248,11 @@ const EditPost = (props) => {
             const dataa = _.get(props, 'data');
             const config = _.get(dataa, 'config');
             const page = _.get(props, 'page');
-        
+            console.log("props post",post)
         
         return (
             <Layout page={page} config={config}>
-                <Header config={config} page='newPost' image={props.headerImg} />
+                <Header config={config} page='editPost' image={post.postData ? post.postData.post_img_url : ''} />
                 <div id="content" className="site-content">
                     <main id="main" className="site-main inner">
                         <article className="post post-full">
@@ -295,10 +322,14 @@ const EditPost = (props) => {
             }
           });
 
-
+        const categories = await client.query({
+        query: GET_CATEGORIES,
+        });
     const props = {
         post_detail: post.data,
-        slug: 'editPost'
+        categories: categories.data,
+        slug: 'editPost',
+        protected: true
     };
         return { props };
     };
