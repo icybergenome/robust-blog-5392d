@@ -1,8 +1,13 @@
+import React from 'react'
+import Page404 from '../components/Page404'
 
+const MyPage404 = () => {
+  return (
+    <>
+        <Page404 />
+    </>
+    
+  )
+}
 
-
-const Error404 = () => {
-  return <h1 style={{textAlign:"center"}}>404 - Page Not Found</h1>;
-};
-
-export default Error404;
+export default MyPage404;
