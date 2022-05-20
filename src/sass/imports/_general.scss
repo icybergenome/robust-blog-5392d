@@ -183,6 +183,7 @@ table {
     font-size: 0.88889rem;
     line-height: 1.5;
     margin: 0 0 1.66667rem;
+    margin-top: 1.375rem;
     text-align: left;
     width: 100%;
 }
@@ -197,7 +198,7 @@ caption {
 
 th,
 td {
-    border-bottom: 1px dashed _palette(border);
+    border: 1px solid _palette(border);
     padding: 0.5em 5px;
 }
 
