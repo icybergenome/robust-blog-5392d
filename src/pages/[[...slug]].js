@@ -12,47 +12,39 @@ import pageLayouts from '../layouts';
 import { client } from '../utils/apollo/apollo';
 
 const Page = (props) => {
+    const modelName = _.get(props.page, 'page.model_name');
+    const PageLayout = pageLayouts[modelName];
+    if (!PageLayout) {
+        throw new Error(`no page layout matching the page model: ${modelName}`);
+    }
 
-
-
-  const modelName = _.get(props.page, 'page.model_name');
-  const PageLayout = pageLayouts[modelName];
-  if (!PageLayout) {
-      throw new Error(`no page layout matching the page model: ${modelName}`);
-  }
-
-
-  
-  return <PageLayout {...props} />;
-    
-}
+    return <PageLayout {...props} />;
+};
 
 export async function getStaticPaths() {
     const paths = await sourcebitDataClient.getStaticPaths();
     return { paths, fallback: false };
-    
 }
 
-export async function getStaticProps({params}) {
-    const slug = data.find((d) => d.name === (params.slug ? params.slug[0] : '/'))
+export async function getStaticProps({ params }) {
+    const slug = data.find((d) => d.name === (params.slug ? params.slug[0] : '/'));
     const categories = await client.query({
-        query: GET_CATEGORIES,
-      });
+        query: GET_CATEGORIES
+    });
     const page = await client.query({
         query: GET_PAGE,
-        variables:{
+        variables: {
             id: slug.id,
             fields: slug.fields
         }
-      });
+    });
     const header = await client.query({
-        query: GET_HEADER,
-      });
+        query: GET_HEADER
+    });
     const posts = await client.query({
-        query: GET_POSTS,
-      });
-    
-    
+        query: GET_POSTS
+    });
+
     const props = {
         slug: slug.name,
         page: page.data,
